@@ -4,7 +4,7 @@ public class Main {
 
 	public static void main(String[] args) 
 	{
-		TestGit myFirstTestGit = new TestGit("My Paramater");
+		TestGit myFirstTestGit = new TestGit("Owner Paramater");
 		System.out.println(myFirstTestGit.returnString());
 		
 		System.out.println("Coucou Quentin !");
