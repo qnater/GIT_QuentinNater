@@ -10,4 +10,9 @@ public class TestGit
 		this.gitFromScratch = parametre;		
 	}
 	
+	public String returnString()
+	{
+		return this.ddwqdswqbgfrefdewbv gitFromScratch;
+	}
+	
 }
