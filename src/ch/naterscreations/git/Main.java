@@ -8,6 +8,7 @@ public class Main {
 		System.out.println(myFirstTestGit.returnString());
 		
 		System.out.println("Coucou Quentin !");
+		System.out.println("Coucou 2");
 	}
 
 }
