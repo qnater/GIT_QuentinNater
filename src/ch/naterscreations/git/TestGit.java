@@ -12,7 +12,7 @@ public class TestGit
 	
 	public String returnString()
 	{
-		return this.ddwqdswqbgfrefdewbv gitFromScratch;
+		return this.gitFromScratch;
 	}
 	
 }
