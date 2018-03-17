@@ -6,6 +6,8 @@ public class Main {
 	{
 		TestGit myFirstTestGit = new TestGit("My Paramater");
 		System.out.println(myFirstTestGit.returnString());
+		
+		System.out.println("Coucou Quentin !");
 	}
 
 }
