@@ -327,6 +327,7 @@ public class Galerie
 					panel_galeries.repaint();
 					
 					frame.dispose();
+					
 					@SuppressWarnings("unused")
 					Galerie g = new Galerie();
 		           

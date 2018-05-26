@@ -274,7 +274,7 @@ public class Contact
 			try 
 			{
 				File myNewFile;
-				if(fileName.equals(""))
+				if(fileName.equals(""))					
 					myNewFile = new File(directory, tName.getText()+".txt");
 				else
 					myNewFile = new File(directory, v.getName() +".txt");
@@ -331,20 +331,28 @@ public class Contact
 			v.setEmail("-"); v.setProfession("-"); v.setOrganisation("-");	v.setWeb("-");
 			v.setDateNaissance("-"); v.setSong("-"); v.setNickname("-"); v.setFavoris("-");
 		}
+		
+		ContactKeyListener myKey = new ContactKeyListener();
+		
+		
 			
 		tName.setText(v.getName());
 			JLabel	lName = new JLabel("Forname");
+			tName.addKeyListener(myKey);
 				
 		tPicture.setText(v.getPic());
+			tPicture.addKeyListener(myKey);
 			JLabel	lPicture = new JLabel("Picture");
 			sPicBrowse = new JLabel();
 			sPicBrowse.addMouseListener(new MouseLisenerContact());
 			sPicBrowse.setIcon(new ImageIcon(Contact.class.getResource("/img/sbrowse.PNG")));
 			
 		tLastname.setText(v.getLastname());
+			tLastname.addKeyListener(myKey);
 			JLabel	lLastname = new JLabel("Lastname");
 				
 		tNumero.setText(v.getTelephone());
+			tNumero.addKeyListener(myKey);
 			JLabel lNumero = new JLabel("Numéro de téléphone");
 			dtelephone = new JLabel();
 			dtelephone.setHorizontalAlignment(SwingConstants.LEFT);
@@ -353,6 +361,7 @@ public class Contact
 		
 			
 		tNumeroP.setText(v.getPortable());
+			tNumeroP.addKeyListener(myKey);
 			JLabel	lNumeroP = new JLabel("Numéro de portable");
 			dportable = new JLabel();
 			dportable.setHorizontalAlignment(SwingConstants.LEFT);
@@ -361,6 +370,7 @@ public class Contact
 		
 		
 		tEmail.setText(v.getEmail());
+			tEmail.addKeyListener(myKey);
 			JLabel	lEmail = new JLabel("Email");
 			demail = new JLabel();
 			demail.setHorizontalAlignment(SwingConstants.LEFT);
@@ -368,24 +378,30 @@ public class Contact
 			demail.addMouseListener(new MouseLisenerContact());
 			
 		tProfession.setText(v.getProfession());
+			tProfession.addKeyListener(myKey);
 			JLabel lProfession = new JLabel("Profession");
 				
 		tOrganisation.setText(v.getOrganisation());
+			tOrganisation.addKeyListener(myKey);
 			JLabel lOrganisation = new JLabel("Organisation");
 				
 		tWeb.setText(v.getWeb());
+			tWeb.addKeyListener(myKey);
 			JLabel	lWeb = new JLabel("Site Web");
 				
 		tDateNaissance.setText(v.getDateNaissance());
+			tDateNaissance.addKeyListener(myKey);
 			JLabel lDateNaissance = new JLabel("Date de Naissance");
 			
 		tSonnerie.setText(v.getSong());
+			tSonnerie.addKeyListener(myKey);
 			JLabel	lSong = new JLabel("Ringston");
 			sSongBrowse = new JLabel();
 			sSongBrowse.addMouseListener(new MouseLisenerContact());
 			sSongBrowse.setIcon(new ImageIcon(Contact.class.getResource("/img/sbrowse.PNG")));
 
 		tSurnom.setText(v.getNickname());
+			tSurnom.addKeyListener(myKey);
 			JLabel lSurnom  = new JLabel("Surnom");
 				
 		JLabel lFavoris  = new JLabel("Favoris");;
@@ -650,6 +666,23 @@ public class Contact
 		}	
 	}
 
+	
+	/**
+	 * ContactKeyListener
+	 * En cas d'enclenchement du clavier
+	 */	
+	class ContactKeyListener extends KeyAdapter
+	{
+
+
+		@Override
+		public void keyTyped(KeyEvent e) 
+		{
+			if(e.getKeyChar() == ';')
+				e.setKeyChar(',');
+		}
+
+	}
 	/**
 	 * MouseLisenerContact
 	 * En cas d'enclenchement de la souris
@@ -873,7 +906,7 @@ public class Contact
 	private void setVariablesByFile(File myFileToSet)
 	{
 		int inc, inc_save; String result;
-		
+
 		try 
 		{
 			FileReader 		rFile 	= new FileReader(myFileToSet);					
@@ -883,7 +916,7 @@ public class Contact
 				
 				inc			= result.indexOf(";", 0);
 				v.setName(result.substring(0, inc));
-				
+								
 				inc_save	= result.indexOf(";", inc+1);
 				v.setPic(result.substring(inc+1, inc_save));
 				
