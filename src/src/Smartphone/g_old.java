@@ -7,8 +7,7 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-
-public class Galerie
+public class g_old
 {
 	// Outil de base
 	private JFrame frame;
@@ -22,15 +21,13 @@ public class Galerie
 	// Dossier photo
 	private String url = "C:\\Smartphone";
 	// String du nom de la photo et de son chemin absolu
-	private String addingPath;
+	private String name, addingPath;
 	
 	// Label utilisé comme un bouton
 	private JLabel lblDelete, lblComeBack, lblContGal;	
 	private JLabel lblTools = new JLabel("Galerie");; 
 	private JLabel lblPic = new JLabel();
 	private JLabel lblAdding = new JLabel();
-	
-	private Variables v = new Variables();
 	
 	// JDialogue (Add-Modify)
 	private JDialog dgFrame;
@@ -42,7 +39,7 @@ public class Galerie
 	public static void main(String[] args)
 	{
 		// Call du constructeur
-		Galerie window = new Galerie();
+		g_old window = new g_old();
 		window.frame.setVisible(true);
 	}
 
@@ -52,7 +49,7 @@ public class Galerie
 	 * Galerie()
 	 * Conctructeur de contact qui initialise la fenètre
 	 */	
-	public Galerie()
+	public g_old()
 	{
 		initialize();
 	}
@@ -62,7 +59,7 @@ public class Galerie
 	 * @param String url : URL du dossier photo
 	 * Conctructeur de contact qui initialise la fenètre avec l'url classique
 	 */	
-	public Galerie(String url)
+	public g_old(String url)
 	{
 		this.url = url;
 		initialize();
@@ -282,7 +279,7 @@ public class Galerie
 			if(myMouse.getSource() == lblContGal)
 			{				
 				@SuppressWarnings("unused")
-				Contact c = new Contact(v.getPic(), true);
+				Contact c = new Contact(name, true);
 			}
 			else if(myMouse.getSource() == lblComeBack)
 			{	
@@ -290,10 +287,10 @@ public class Galerie
 			}
 			else if(myMouse.getSource() == lblDelete)
 			{
-				fileUnique(url, v.getName(), "delete");
+				fileUnique(url, name, "delete");
 				frame.dispose();
 				@SuppressWarnings("unused")
-				Galerie g = new Galerie();
+				g_old g = new g_old();
 				panel_galeries.repaint();
 			}
 			else if(myMouse.getSource() == lblAdding)
@@ -328,15 +325,14 @@ public class Galerie
 					
 					frame.dispose();
 					@SuppressWarnings("unused")
-					Galerie g = new Galerie();
+					g_old g = new g_old();
 		           
 			}
 
 			else 
 			{
 				JLabel objectLbl = (JLabel) myMouse.getSource();				
-				v.setName(objectLbl.getText());
-				v.setPic(objectLbl.getText());
+				name = objectLbl.getText();
 				
 				panel_tools.removeAll();
 					tools_beta_add(objectLbl.getIcon());
@@ -356,7 +352,7 @@ public class Galerie
 		{
 			try 
 			{
-				String install = "cmd /C start "+ v.getName();
+				String install = "cmd /C start "+ name;
 				Runtime.getRuntime().exec(install);
 			}
 			catch (IOException e)

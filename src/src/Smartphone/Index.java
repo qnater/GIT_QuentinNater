@@ -59,7 +59,7 @@ public class Index
 		index.setResizable(false);
 		
 		// Header's & Footer's Call
-		Layout contact = new Layout(panel_north, panel_south, index);
+		Pattern contact = new Pattern(panel_north, panel_south, index);
 			contact.Header(true);
 			contact.Footer(true, true);
    
@@ -77,9 +77,6 @@ public class Index
 				lblWallpaper.setIcon(new ImageIcon(Contact.class.getResource("/img/wallpaper.JPG")));
 						
 			
-			
-			
-			
 			panel_favicon.setLayout(new GridLayout(0,2));
 			
 			//panel_center.add(panel_center, new ImageIcon(Contact.class.getResource("/img/sbrowse.PNG"));		
@@ -87,17 +84,17 @@ public class Index
 			lblContact = new JLabel();
 			lblContact.addMouseListener(new MouseLisenerIndex());
 			lblContact.setHorizontalAlignment(SwingConstants.CENTER);
-			lblContact.setIcon(new ImageIcon(Contact.class.getResource("/img/contactPage.PNG")));
+			lblContact.setIcon(new ImageIcon(Contact.class.getResource("/img/contact_sam.PNG")));
 			
 			lblGalerie = new JLabel();
 			lblGalerie.addMouseListener(new MouseLisenerIndex());
 			lblGalerie.setHorizontalAlignment(SwingConstants.CENTER);
-			lblGalerie.setIcon(new ImageIcon(Contact.class.getResource("/img/galeriesPage.PNG")));
+			lblGalerie.setIcon(new ImageIcon(Contact.class.getResource("/img/galerie_sam.PNG")));
 			
 			lblDirectory = new JLabel();
 			lblDirectory.addMouseListener(new MouseLisenerIndex());
 			lblDirectory.setHorizontalAlignment(SwingConstants.CENTER);
-			lblDirectory.setIcon(new ImageIcon(Contact.class.getResource("/img/URL.PNG")));
+			lblDirectory.setIcon(new ImageIcon(Contact.class.getResource("/img/directory_sam.PNG")));
 	
 			panel_index.add(lblWallpaper);			
 
@@ -110,6 +107,29 @@ public class Index
 			panel_favicon.add(lblContact);
 			panel_favicon.add(lblGalerie);			
 			panel_directory.add(lblDirectory);
+			
+			try 
+			{
+				File fUrl = new File(url);
+				if(!fUrl.exists())
+					fUrl.mkdirs();
+				
+				File fLink = new File(fUrl, "url.txt");
+				if(!fLink.exists() || !fLink.isFile())
+					fLink.createNewFile();
+				
+				// Flux de base (pour voir)
+				FileWriter flowfile = new FileWriter(fLink);
+				
+				// Flux Tampon (englobe le flux de base).
+				BufferedWriter 	bwrite= new BufferedWriter(flowfile);
+					bwrite.write(url);
+					bwrite.close();
+			} 
+			catch (IOException e) 
+			{
+			}
+			
 			
 	}
 	
@@ -157,8 +177,8 @@ public class Index
 				}
 				catch(Exception e)
 				{
+					lblDirectory.setText("");
 					url = "C:\\Smartphone";
-					lblDirectory.setText("Chemin non-valide");
 				}
 			}
 		}

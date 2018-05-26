@@ -6,7 +6,7 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class Contact
+public class c_old
 {
 	// Vital tools
 	private JFrame frame;
@@ -53,8 +53,8 @@ public class Contact
 	// JDialogue Contact (Add-Modify)
 	private JDialog dgFrame;
 	
-	private boolean t;
 	private String imageContact;
+	private boolean t;
 	
 	// Textbox (infos contacts)
 	private JTextField tName = new JTextField(19);	
@@ -70,8 +70,11 @@ public class Contact
 	private JTextField tSonnerie = new JTextField(16);	
 	private JTextField tSurnom = new JTextField(19);
 	private JCheckBox cFavoris = new JCheckBox();
+	
+	// Variables des contactes
+	private String name, lastname, telephone, portable, email, profession, organisation, web, dateNaissance, song, nickname, pic, favoris;
+	
 
-	private Variables v = new Variables();
 	
 	/**
 	 * main()
@@ -80,7 +83,7 @@ public class Contact
 	public static void main(String[] args)
 	{
 		// Call du constructeur
-		Contact window = new Contact();
+		c_old window = new c_old();
 		window.frame.setVisible(true);
 	}
 
@@ -88,7 +91,7 @@ public class Contact
 	 * Contact()
 	 * Conctructeur de contact qui initialise la fenètre
 	 */	
-	public Contact()
+	public c_old()
 	{
 		initialize();
 	}
@@ -98,7 +101,7 @@ public class Contact
 	 * @param String url : Lien du dossier contenant les fichiers
 	 * Conctructeur de contact qui initialise la fenètre
 	 */	
-	public Contact(String url)
+	public c_old(String url)
 	{
 		this.url = url;
 		initialize();
@@ -111,12 +114,12 @@ public class Contact
 	 * @param boolean t : Lien du dossier contenant les fichiers
 	 * Conctructeur de contact qui initialise la fenètre
 	 */	
-	public Contact(String pic, boolean t) 
+	public c_old(String imageContact, boolean t)
 	{
-		v.setPic(pic);
 		this.t = t;
-		imageContact = pic;
+		this.imageContact= imageContact;
 		initialize();	
+		
 	}
 
 	/**
@@ -277,7 +280,7 @@ public class Contact
 				if(fileName.equals(""))
 					myNewFile = new File(directory, tName.getText()+".txt");
 				else
-					myNewFile = new File(directory, v.getName() +".txt");
+					myNewFile = new File(directory, name+".txt");
 				
 				myNewFile.createNewFile();
 				
@@ -285,14 +288,14 @@ public class Contact
 				BufferedWriter 	bFile 	= new BufferedWriter(wFile);
 				
 				if(cFavoris.isSelected())
-					v.setFavoris("1");
+					favoris = "1";
 				else
-					v.setFavoris("0");
+					favoris = "0";
 				
 				if(fileName.equals(""))
-					bFile.write(tName.getText()+";"+tPicture.getText()+";"+tLastname.getText()+";"+tNumero.getText()+";"+tNumeroP.getText()+";"+tEmail.getText()+";"+tProfession.getText()+";"+tOrganisation.getText()+";"+tWeb.getText()+";"+tDateNaissance.getText()+";"+tSonnerie.getText()+";"+tSurnom.getText()+";"+v.getFavoris()+";");
+					bFile.write(tName.getText()+";"+tPicture.getText()+";"+tLastname.getText()+";"+tNumero.getText()+";"+tNumeroP.getText()+";"+tEmail.getText()+";"+tProfession.getText()+";"+tOrganisation.getText()+";"+tWeb.getText()+";"+tDateNaissance.getText()+";"+tSonnerie.getText()+";"+tSurnom.getText()+";"+favoris+";");
 				else
-					bFile.write(v.getName()+";"+fileName+";"+v.getLastname()+";"+v.getTelephone()+";"+v.getPortable()+";"+v.getEmail()+";"+v.getProfession()+";"+v.getOrganisation()+";"+v.getWeb()+";"+v.getDateNaissance()+";"+v.getSong()+";"+v.getNickname()+";"+v.getFavoris()+";");
+					bFile.write(name+";"+fileName+";"+lastname+";"+telephone+";"+portable+";"+email+";"+profession+";"+organisation+";"+web+";"+dateNaissance+";"+song+";"+nickname+";"+favoris+";");
 				
 					
 				bFile.close();
@@ -326,66 +329,67 @@ public class Contact
 	{
 		if(mode.equals("set"))
 		{
-			v.setName("name");
-			v.setPic("-");	v.setLastname("-");	v.setTelephone("-"); v.setPortable("-");
-			v.setEmail("-"); v.setProfession("-"); v.setOrganisation("-");	v.setWeb("-");
-			v.setDateNaissance("-"); v.setSong("-"); v.setNickname("-"); v.setFavoris("-");
+			name = "name";
+			pic = "-";	lastname = "-";	telephone = "-"; portable = "-";
+			email = "-"; profession = "-"; organisation = "-";	web = "-";
+			dateNaissance = "-"; song = "-";	nickname = "-";	favoris = "-";
+			
 		}
 			
-		tName.setText(v.getName());
+		tName.setText(name);
 			JLabel	lName = new JLabel("Forname");
 				
-		tPicture.setText(v.getPic());
+		tPicture.setText(pic);
 			JLabel	lPicture = new JLabel("Picture");
 			sPicBrowse = new JLabel();
 			sPicBrowse.addMouseListener(new MouseLisenerContact());
-			sPicBrowse.setIcon(new ImageIcon(Contact.class.getResource("/img/sbrowse.PNG")));
+			sPicBrowse.setIcon(new ImageIcon(c_old.class.getResource("/img/sbrowse.PNG")));
 			
-		tLastname.setText(v.getLastname());
+		tLastname.setText(lastname);
 			JLabel	lLastname = new JLabel("Lastname");
 				
-		tNumero.setText(v.getTelephone());
+		tNumero.setText(telephone);
 			JLabel lNumero = new JLabel("Numéro de téléphone");
 			dtelephone = new JLabel();
 			dtelephone.setHorizontalAlignment(SwingConstants.LEFT);
-			dtelephone.setIcon(new ImageIcon(Contact.class.getResource("/img/sdelete.PNG")));
+			dtelephone.setIcon(new ImageIcon(c_old.class.getResource("/img/sdelete.PNG")));
 			dtelephone.addMouseListener(new MouseLisenerContact());
 		
 			
-		tNumeroP.setText(v.getPortable());
+		tNumeroP.setText(portable);
 			JLabel	lNumeroP = new JLabel("Numéro de portable");
 			dportable = new JLabel();
 			dportable.setHorizontalAlignment(SwingConstants.LEFT);
-			dportable.setIcon(new ImageIcon(Contact.class.getResource("/img/sdelete.PNG")));
+			dportable.setIcon(new ImageIcon(c_old.class.getResource("/img/sdelete.PNG")));
 			dportable.addMouseListener(new MouseLisenerContact());
 		
 		
-		tEmail.setText(v.getEmail());
+		tEmail.setText(email);
 			JLabel	lEmail = new JLabel("Email");
 			demail = new JLabel();
 			demail.setHorizontalAlignment(SwingConstants.LEFT);
-			demail.setIcon(new ImageIcon(Contact.class.getResource("/img/sdelete.PNG")));
+			demail.setIcon(new ImageIcon(c_old.class.getResource("/img/sdelete.PNG")));
 			demail.addMouseListener(new MouseLisenerContact());
 			
-		tProfession.setText(v.getProfession());
+		tProfession.setText(profession);
 			JLabel lProfession = new JLabel("Profession");
 				
-		tOrganisation.setText(v.getOrganisation());
+		tOrganisation.setText(organisation);
 			JLabel lOrganisation = new JLabel("Organisation");
 				
-		tWeb.setText(v.getWeb());
+		tWeb.setText(web);
 			JLabel	lWeb = new JLabel("Site Web");
 				
-		tDateNaissance.setText(v.getDateNaissance());
+		tDateNaissance.setText(dateNaissance);
 			JLabel lDateNaissance = new JLabel("Date de Naissance");
 			
-		tSonnerie.setText(v.getSong());
+		tSonnerie.setText(song);
 			JLabel	lSong = new JLabel("Ringston");
 			sSongBrowse = new JLabel();
 			sSongBrowse.addMouseListener(new MouseLisenerContact());
-			sSongBrowse.setIcon(new ImageIcon(Contact.class.getResource("/img/sbrowse.PNG")));
+			sSongBrowse.setIcon(new ImageIcon(c_old.class.getResource("/img/sbrowse.PNG")));
 
-		tSurnom.setText(v.getNickname());
+		tSurnom.setText(nickname);
 			JLabel lSurnom  = new JLabel("Surnom");
 				
 		JLabel lFavoris  = new JLabel("Favoris");;
@@ -459,7 +463,7 @@ public class Contact
 	 */	
 	private void showContact()
 	{
-		char c = v.getName().substring(0, 1).charAt(0); 
+		char c = name.substring(0, 1).charAt(0); 
 		
 		int codex = ((int)(c))-65;
 
@@ -470,7 +474,7 @@ public class Contact
 		{
 			if(first[codex] != '"')
 			{
-				JLabel title = new JLabel(v.getName().substring(0, 1));
+				JLabel title = new JLabel(name.substring(0, 1));
 				panel_contacts.add(title);
 				
 				title.setOpaque(true);
@@ -486,22 +490,22 @@ public class Contact
 			System.out.println("Nom non conforme");
 		}
 		
-		lblPic = new JLabel(v.getName());
+		lblPic = new JLabel(name);
 
 		panel_contacts.add(lblPic);
 		lblPic.setForeground(SystemColor.control);
 		
-		File f = new File(v.getPic());
+		File f = new File(pic);
 		
 		ImageIcon imageIcon;
 		
 		if(f.isFile())
 		{
-			imageIcon = new ImageIcon(v.getPic()); // load the image to a imageIcon
+			imageIcon = new ImageIcon(pic); // load the image to a imageIcon
 		}
 		else
 		{
-			imageIcon = (new ImageIcon(Contact.class.getResource("/img/default.PNG")));
+			imageIcon = (new ImageIcon(c_old.class.getResource("/img/default.PNG")));
 		}
 		Image image = imageIcon.getImage(); // transform it 
 		Image newimg = image.getScaledInstance(45, 45,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
@@ -519,20 +523,20 @@ public class Contact
 		// ADD OPTIONS
 		lblAdd = new JLabel("");
 		lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAdd.setIcon(new ImageIcon(Contact.class.getResource("/img/addSubmit.PNG")));
+		lblAdd.setIcon(new ImageIcon(c_old.class.getResource("/img/addSubmit.PNG")));
 		panel_tools.add(lblAdd);
 
 		// SHOW CONTACT
 		lblContact = new JLabel("");
 		panel_tools.add(lblContact);		
 		lblContact.setHorizontalAlignment(SwingConstants.CENTER);
-		lblContact.setIcon(new ImageIcon(Contact.class.getResource("/img/contactSubmit.PNG")));
+		lblContact.setIcon(new ImageIcon(c_old.class.getResource("/img/contactSubmit.PNG")));
 		
 		// FAVORIS CONTACT
 		lblFavoris = new JLabel("");
 		panel_tools.add(lblFavoris);		
 		lblFavoris.setHorizontalAlignment(SwingConstants.CENTER);
-		lblFavoris.setIcon(new ImageIcon(Contact.class.getResource("/img/favorisSubmit.PNG")));
+		lblFavoris.setIcon(new ImageIcon(c_old.class.getResource("/img/favorisSubmit.PNG")));
 		
 
 		MouseLisenerContact mlc = new MouseLisenerContact();
@@ -549,7 +553,7 @@ public class Contact
 	 */	
 	private void tools_beta_add(Icon icon)
 	{
-		JLabel lblLooking = new JLabel(v.getName());
+		JLabel lblLooking = new JLabel(name);
 		lblLooking.setIcon(icon);
 
 		lblLooking.setForeground(Color.BLACK);
@@ -560,20 +564,20 @@ public class Contact
 		// ADD OPTIONS
 		lblModifier = new JLabel("");
 		lblModifier.setHorizontalAlignment(SwingConstants.CENTER);
-		lblModifier.setIcon(new ImageIcon(Contact.class.getResource("/img/modifySubmit.PNG")));
+		lblModifier.setIcon(new ImageIcon(c_old.class.getResource("/img/modifySubmit.PNG")));
 		panel_tools.add(lblModifier);
 
 		// SHOW CONTACT
 		lblDelete = new JLabel("");
 		panel_tools.add(lblDelete);		
 		lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDelete.setIcon(new ImageIcon(Contact.class.getResource("/img/crossSubmit.PNG")));
+		lblDelete.setIcon(new ImageIcon(c_old.class.getResource("/img/crossSubmit.PNG")));
 		
 		// FAVORIS CONTACT
 		lblComeBack = new JLabel("");
 		panel_tools.add(lblComeBack);		
 		lblComeBack.setHorizontalAlignment(SwingConstants.CENTER);
-		lblComeBack.setIcon(new ImageIcon(Contact.class.getResource("/img/backSubmit.PNG")));
+		lblComeBack.setIcon(new ImageIcon(c_old.class.getResource("/img/backSubmit.PNG")));
 
 		
 		MouseLisenerContact mlc = new MouseLisenerContact();
@@ -662,8 +666,8 @@ public class Contact
 			if(t)
 			{
 				JLabel objectLbl = (JLabel) myMouse.getSource();
-				v.setName(objectLbl.getText());	
-				fileUnique(url, v.getName(), imageContact);
+				name = objectLbl.getText();				
+				fileUnique(url, name, imageContact);
 				
 				frame.dispose();
 			}
@@ -690,7 +694,7 @@ public class Contact
 				}
 				else if(myMouse.getSource() == lblDelete)
 				{
-					fileUnique(url, v.getName(), "delete");
+					fileUnique(url, name, "delete");
 					
 					panel_tools.removeAll();
 						tools_alpha_add();
@@ -700,7 +704,7 @@ public class Contact
 				}
 				else if(myMouse.getSource() == lblModifier)
 				{
-					fileUnique(url, v.getName(), "modify");
+					fileUnique(url, name, "modify");
 					
 					panel_tools.removeAll();
 						tools_alpha_add();
@@ -721,8 +725,8 @@ public class Contact
 		            try // En cas d'annulation
 		            {
 			            chooser.showOpenDialog(null);
-			            v.setPic(chooser.getSelectedFile().toString());
-			            tPicture.setText(v.getPic()); 
+			            pic = chooser.getSelectedFile().toString();
+			            tPicture.setText(pic); 
 		            }
 		            catch (Exception e)
 		            {
@@ -740,8 +744,8 @@ public class Contact
 		            try // En cas d'annulation
 		            {
 			            chooser.showOpenDialog(null);
-			            v.setSong(chooser.getSelectedFile().toString());
-			            tSonnerie.setText(v.getSong()); 
+			            song = chooser.getSelectedFile().toString();
+			            tSonnerie.setText(song); 
 		            }
 		            catch (Exception e)
 		            {
@@ -763,7 +767,7 @@ public class Contact
 				else
 				{
 					JLabel objectLbl = (JLabel) myMouse.getSource();
-					v.setName(objectLbl.getText());
+					name = objectLbl.getText();
 					
 					panel_tools.removeAll();
 						tools_beta_add(objectLbl.getIcon());
@@ -810,7 +814,7 @@ public class Contact
 							}
 							else if(action.equals("favoris"))
 							{						
-								if(v.getFavoris().equals("1"))
+								if(favoris.equals("1"))
 									showContact();
 							}						
 						}
@@ -882,43 +886,43 @@ public class Contact
 				result 		= bFile.readLine();
 				
 				inc			= result.indexOf(";", 0);
-				v.setName(result.substring(0, inc));
+				name 		= result.substring(0, inc);
 				
 				inc_save	= result.indexOf(";", inc+1);
-				v.setPic(result.substring(inc+1, inc_save));
+				pic 		= result.substring(inc+1, inc_save);
 				
 				inc			= result.indexOf(";", inc_save+1);
-				v.setLastname(result.substring(inc_save+1, inc));
+				lastname	= result.substring(inc_save+1, inc);
 				
 				inc_save 	= result.indexOf(";", inc+1);
-				v.setTelephone(result.substring(inc+1, inc_save));
+				telephone	= result.substring(inc+1, inc_save);
 				
 				inc			= result.indexOf(";", inc_save+1);
-				v.setPortable(result.substring(inc_save+1, inc));
+				portable	= result.substring(inc_save+1, inc);
 				
 				inc_save 	= result.indexOf(";", inc+1);
-				v.setEmail(result.substring(inc+1, inc_save));
+				email		= result.substring(inc+1, inc_save);
 				
 				inc			= result.indexOf(";", inc_save+1);
-				v.setProfession(result.substring(inc_save+1, inc));
+				profession	= result.substring(inc_save+1, inc);
 				
 				inc_save 	= result.indexOf(";", inc+1);
-				v.setOrganisation(result.substring(inc+1, inc_save));
+				organisation= result.substring(inc+1, inc_save);
 				
 				inc			= result.indexOf(";", inc_save+1);
-				v.setWeb(result.substring(inc_save+1, inc));
+				web			= result.substring(inc_save+1, inc);
 				
 				inc_save 	= result.indexOf(";", inc+1);
-				v.setDateNaissance(result.substring(inc+1, inc_save));
+				dateNaissance= result.substring(inc+1, inc_save);
 				
 				inc			= result.indexOf(";", inc_save+1);
-				v.setSong(result.substring(inc_save+1, inc));
+				song		= result.substring(inc_save+1, inc);
 				
 				inc_save 	= result.indexOf(";", inc+1);
-				v.setNickname(result.substring(inc+1, inc_save));
+				nickname	= result.substring(inc+1, inc_save);
 				
 				inc			= result.indexOf(";", inc_save+1);
-				v.setFavoris(result.substring(inc_save+1, inc));
+				favoris		= result.substring(inc_save+1, inc);
 		
 			bFile.close();
 		}

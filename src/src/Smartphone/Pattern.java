@@ -9,16 +9,22 @@ import java.util.Calendar;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
-public class Layout 
+public class Pattern 
 {
 	JPanel panel_north = new JPanel();
 	JPanel panel_south = new JPanel();
 	JFrame fmMain = new JFrame();
 	JDialog dgFrame = new JDialog();
+	
+	JPanel panel_left;
 
 	JButton btnHome;
 	JButton btnRevert;
 	JLabel lblTime;
+	JLabel lblNotification; 
+	
+	
+	private int inc = 0;
 	
 	/**
 	 * Contructor
@@ -26,7 +32,7 @@ public class Layout
 	 * @param panel_south 	: Emplacement sud de la fenètre
 	 * @param fmMain 		: Fenètre en question
 	 */	
-	public Layout(JPanel panel_north, JPanel panel_south, JFrame fmMain) 
+	public Pattern(JPanel panel_north, JPanel panel_south, JFrame fmMain) 
 	{
 		this.panel_south = panel_south;
 		this.panel_north = panel_north;
@@ -34,13 +40,16 @@ public class Layout
 	}
 
 	
-	public Layout(JDialog dgFrame) 
+	public Pattern(JDialog dgFrame) 
 	{
 		this.dgFrame  = dgFrame;
 	}
 	
 	public void Header(boolean v)
 	{
+
+		
+		
 		if(v)
 			fmMain.getContentPane().add(panel_north, BorderLayout.NORTH);		
 		else
@@ -58,10 +67,11 @@ public class Layout
 				lblOperateur.setFont(new Font("Tahoma", Font.PLAIN, 18));
 				lblOperateur.setForeground(new Color(255, 255, 255));
 			
-			JLabel lblNotification = new JLabel("");
-				panel_left.add(lblNotification);
-				lblNotification.setIcon(new ImageIcon(Contact.class.getResource("/img/whatapp.PNG")));
-			
+			lblNotification = new JLabel("");
+			panel_left.add(lblNotification);
+			lblNotification.setIcon(new ImageIcon(Contact.class.getResource("/img/whatapp.PNG")));
+			lblNotification.setEnabled(false);
+				
 		JPanel panel_right = new JPanel();
 		panel_north.add(panel_right);
 			panel_right.setBackground(new Color(0, 0, 0));
@@ -83,6 +93,10 @@ public class Layout
 				panel_right.add(lblBatterie);
 				lblBatterie.setIcon(new ImageIcon(Contact.class.getResource("/img/batterie.PNG")));
 			
+			Calendar cal = Calendar.getInstance();
+		    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+		    lblTime = new JLabel(sdf.format(cal.getTime()));
+  
 			time();
 			
 				panel_right.add(lblTime);
@@ -92,17 +106,10 @@ public class Layout
 	
 	public void time()
 	{
-		@SuppressWarnings("unused")
-		Timer timer = new Timer(60, setTime());
+		Timer timer = new Timer(1000, new ClockListener());
+		timer.start();
     }
-
-	private ActionListener setTime() 
-	{
-		Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");	        
-		lblTime = new JLabel(sdf.format(cal.getTime()));
-		return null;
-	}
+	
 
 	public void Footer(boolean v, boolean level)
 	{
@@ -148,6 +155,8 @@ public class Layout
 		JScrollPane jspCenter = new JScrollPane(in);
 		out.add(jspCenter, BorderLayout.CENTER);
 		jspCenter.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		jspCenter.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		
 	}
 	
 	class ActionListenerFooter implements ActionListener
@@ -182,6 +191,23 @@ public class Layout
 			@SuppressWarnings("unused")
 			Locked l = new Locked();
 		}
+	}
+	
+	class ClockListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent arg0) 
+		{
+			inc++;
+			Calendar cal = Calendar.getInstance();
+	        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+	        lblTime.setText(sdf.format(cal.getTime()));
+	        
+	        if(inc == 5)
+	        	lblNotification.setEnabled(true);
+	        
+		}	        
+		
 	}
 
 }
