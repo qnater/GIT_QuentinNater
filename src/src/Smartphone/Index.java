@@ -107,10 +107,11 @@ public class Index
 			panel_favicon.add(lblContact);
 			panel_favicon.add(lblGalerie);			
 			panel_directory.add(lblDirectory);
+
 			
 			try 
 			{
-				File fUrl = new File(url);
+				File fUrl = new File("C:\\Smartphone");
 				if(!fUrl.exists())
 					fUrl.mkdirs();
 				
@@ -119,17 +120,17 @@ public class Index
 					fLink.createNewFile();
 				
 				// Flux de base (pour voir)
-				FileWriter flowfile = new FileWriter(fLink);
+				FileReader flowfile = new FileReader(fLink);
 				
 				// Flux Tampon (englobe le flux de base).
-				BufferedWriter 	bwrite= new BufferedWriter(flowfile);
-					bwrite.write(url);
-					bwrite.close();
+				BufferedReader 	bread= new BufferedReader(flowfile);
+				url = bread.readLine();
+				setUrl(url);
+				bread.close();
 			} 
 			catch (IOException e) 
 			{
 			}
-			
 			
 	}
 	
@@ -160,25 +161,50 @@ public class Index
 			{
 				try
 				{
-					url = JOptionPane.showInputDialog("Racine du smartphone", url);
+					
+					url = JOptionPane.showInputDialog("Racine du smartphone", getUrl());
+					
+					setUrl(url);
+					
 					File check = new File(url);
 					if(!check.isDirectory())
 					{
-						url = "C:\\Smartphone";
+						url = getUrl();
 						lblDirectory.setText("Chemin non-valide");
 						lblDirectory.setForeground(Color.RED);
 					}
 					else
 					{
 						lblDirectory.setText("");
-						url = "C:\\Smartphone";			
+						url = getUrl();		
 						
 					}
+					
+					try 
+					{
+						File fLink = new File("C:\\Smartphone", "url.txt");
+						
+						// Flux de base (pour voir)
+						FileWriter flowfile = new FileWriter(fLink);
+						
+						// Flux Tampon (englobe le flux de base).
+						BufferedWriter 	bwrite= new BufferedWriter(flowfile);
+						
+						bwrite.write(url);
+						setUrl(url);
+						bwrite.close();
+					} 
+					catch (IOException e) 
+					{
+					}
+					
+					
+					
 				}
 				catch(Exception e)
 				{
 					lblDirectory.setText("");
-					url = "C:\\Smartphone";
+					url = getUrl();
 				}
 			}
 		}

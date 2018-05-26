@@ -142,12 +142,7 @@ public class Contact
 		
 		// Création d'une arborescence pour abriter les contacts
 		File directory = new File(url);
-		if(!directory.exists())
-		{
-			if(!directory.isDirectory())
-				directory.mkdir();
-		}
-   
+
 		// == PANEL configurations == /
 		
 		// Contact 1st Panel
