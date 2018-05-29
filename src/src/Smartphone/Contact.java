@@ -8,14 +8,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Contact
 {
-	// Vital tools
+	// Outils vitauy
 	private JFrame frame;
 	private JPanel panel_contacts = new JPanel();
 	
-	// Alphabet array
+	// Tableau de l'alphabet
 	private char[] first = new char[26];
 	
-	// Labels Tools (Use like submit)
+	// Labels outils utilisés comme des boutons
 	private JLabel lblAdd;
 	private JLabel lblContact;
 	private JLabel lblFavoris;	
@@ -24,19 +24,19 @@ public class Contact
 	private JLabel lblComeBack;
 	private JLabel lblPic;
 	
-	// Header's & Footer's Panel
+	// Panels du Header et du Footer
 	private	JPanel panel_north = new JPanel();
 	private	JPanel panel_south = new JPanel();
 	
-	// JPanel (Page de modificatio), d'ajout et d'outils
+	// JPanel (Page de modification, d'ajout et d'outils)
 	private JPanel panel_adding;
 	private JPanel panel_add;
 	private JPanel panel_tools;
 	
-	// Directory of the contact's picture
+	// URL primaire des fichiers de configurations 
 	private String url = "C:\\Smartphone";
 	
-	// Addin' / Modifin' Dialog Form
+	// Boutons de sauvegarde ou d'annulation
 	private JButton submitSave;
 	private JButton submitCancel;
 	//private JButton submitReset;
@@ -45,14 +45,15 @@ public class Contact
 	private JLabel sPicBrowse;
 	private JLabel sSongBrowse;
 	
-	// Delete text from textbox
+	// Supression du text dans les textboxes
 	private JLabel demail;
 	private JLabel dtelephone;
 	private JLabel dportable;
 	
-	// JDialogue Contact (Add-Modify)
+	// JDialogue Contact (Ajout-Modification)
 	private JDialog dgFrame;
 	
+	// Appel des autres classes
 	private boolean t;
 	private String imageContact;
 	
@@ -71,6 +72,7 @@ public class Contact
 	private JTextField tSurnom = new JTextField(19);
 	private JCheckBox cFavoris = new JCheckBox();
 
+	// Appel des variables
 	private Variables v = new Variables();
 	
 	/**
@@ -101,14 +103,14 @@ public class Contact
 	public Contact(String url)
 	{
 		this.url = url;
-		initialize();
-		
+		initialize();	
 	}
 	
 	
 	/**
-	 * Contact()
-	 * @param boolean t : Lien du dossier contenant les fichiers
+	 * Contact() - Ouverture d'une page simplifiée pour ajouter une photo de profil
+	 * @param String pic : Lien du dossier contenant les fichiers
+	 * @param boolean t : Activation du mode
 	 * Conctructeur de contact qui initialise la fenètre
 	 */	
 	public Contact(String pic, boolean t) 
@@ -134,7 +136,7 @@ public class Contact
 		frame.setResizable(false);
 		
 		
-		// Header's & Footer's Call
+		// Appel de l'Header et du Footer
 		Pattern contact = new Pattern(panel_north, panel_south, frame);
 			contact.Header(true);
 			contact.Footer(true, false);
@@ -145,19 +147,19 @@ public class Contact
 
 		// == PANEL configurations == /
 		
-		// Contact 1st Panel
+			// Initialisation du panel principal
 			JPanel panel_center = new JPanel();
 			frame.getContentPane().add(panel_center, BorderLayout.CENTER);
 			panel_center.setLayout(new BorderLayout(0, 0));
 			panel_center.setBackground(SystemColor.BLACK);
 			
-			// Height of the GridLayout
-			File[] contatcs = directory.listFiles();			
-		
-			// Contact 2sd Panel
+			// Configuration du panel des contacts
 			panel_contacts.setAutoscrolls(true);
 			panel_contacts.setBackground(Color.BLACK);
-			
+						
+			// Taille du GridLayout
+			File[] contatcs = directory.listFiles();			
+
 			int height = contatcs.length*2;			
 			try
 			{
@@ -171,25 +173,27 @@ public class Contact
 				
 			}
 			
-		// Contact 3rd Panel
+		// Configuration du panel des outils
 		panel_tools = new JPanel();
 		panel_tools.setPreferredSize(new Dimension(10, 100));
 		panel_center.add(panel_tools, BorderLayout.NORTH);
 		panel_tools.setBackground(Color.BLACK);
 		panel_tools.setLayout(new GridLayout(1, 3));
 		
+		// Mise en place de la scroll bar
 		contact.Scroll(panel_contacts, panel_center);
 		
-		//if(!t)
+		// Appel des outils primaires
 		tools_alpha_add();
 	 
-		// Save file call
+		// Lecuture des fichiers de configuration des contacts
 		file(url, "show");
 		
+		// En cas d'extinction de la fenètre
 		frame.addWindowListener(new FrameListener());
+		
 		frame.repaint();
 	}
-
 
 	/**
 	 * AddContact() 
@@ -197,6 +201,7 @@ public class Contact
 	 */	
 	private void AddContact() 
 	{
+		// Initialise les informations des textboxes
 		setInfos("set");
 	}
 	
@@ -207,71 +212,78 @@ public class Contact
 	 */	
 	private void ChangeContact(String mode) 
 	{
+		// Initialisation d'un JDialog
 		dgFrame = new JDialog();
 		dgFrame.getContentPane().setLayout(new BorderLayout(0, 0));
 		dgFrame.setSize(480, 800);
 		dgFrame.setVisible(true);
 		dgFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-				
+			
+		// Mise en place de l'Header et du Footer, pour les JDialog
 		Pattern adding = new Pattern(dgFrame);
 		adding.Header(false);
 		adding.Footer(false, false);
 		
+		// Initialisation des panels
 		panel_adding 	= new JPanel();
-		panel_add 		= new JPanel();
-		
+		panel_add 		= new JPanel();	
 		JPanel panel_save = new JPanel();
-
 		dgFrame.add(panel_save, BorderLayout.SOUTH);
-
-
 		panel_save.setLayout(new GridLayout(0, 2));
-		
+
+		// Initialisation des boutons
 		submitSave = new JButton("Save");
 		submitCancel = new JButton("Cancel");
-		
 		panel_save.add(submitSave);
 		panel_save.add(submitCancel);
 		
+		// Initialisation de l'action listener
 		ButtonActionListener bal = new ButtonActionListener();
 		submitSave.addActionListener(bal);
 		submitCancel.addActionListener(bal);
 		
+		// Ajout des panels dans le dialog	
 		dgFrame.add(panel_adding, BorderLayout.CENTER);
 			panel_adding.setLayout(new BorderLayout(0, 0));
 			panel_adding.add(panel_add, BorderLayout.CENTER);
 		
+		// Initialisation de la sroll bar
 		panel_adding.setAutoscrolls(true);
-		
 		adding.Scroll(panel_add, panel_adding);
 		panel_add.setLayout(new GridLayout(13, 2));
 		panel_add.setBackground(SystemColor.scrollbar);
 		
+		// En cas de modification, lecture du fichier contact
 		if(mode.equals("modify"))
 			setInfos("modify");
-		else
+		else // Autrement ajout de données
 			AddContact();
 		
+		// En cas d'interruption de la dialog (fermeture)
 		dgFrame.addWindowListener(new DialogFrameListener());
 	}
 
 	/**
-	 * fileWriter() 
+	 * fileWriter(String fileName) 
 	 * Écriture d'un nouveau contact dans un fichier de configuration
-	 * @param fileName 
+	 * @param String fileName : Nom de l'image en question
 	 */	
 	private void fileWriter(String fileName) 
 	{
+		// Création d'un directory avec l'url enregistrée.
 		File directory = new File(url);
 		
+		// Si l'url est valide
 		if(directory.isDirectory())
 		{
 			try 
 			{
-				File myNewFile;
-				if(fileName.equals(""))					
+				File myNewFile; // Initialisation d'un fichier
+				
+				// Ecriture du fichier en question, selon le nom donné
+				if(fileName.equals(""))	// Ajout normal			
 					myNewFile = new File(directory, tName.getText()+".txt");
-				else
+				else // Photo de la galerie
 					myNewFile = new File(directory, v.getName() +".txt");
 				
 				myNewFile.createNewFile();
@@ -279,19 +291,22 @@ public class Contact
 				FileWriter 		wFile 	= new FileWriter(myNewFile);					
 				BufferedWriter 	bFile 	= new BufferedWriter(wFile);
 				
+				// Vérification de la checkbox favori
 				if(cFavoris.isSelected())
 					v.setFavoris("1");
 				else
 					v.setFavoris("0");
 				
-				if(fileName.equals(""))
+				
+				if(fileName.equals("")) // Ecriture des variables à partir des textboxes
 					bFile.write(tName.getText()+";"+tPicture.getText()+";"+tLastname.getText()+";"+tNumero.getText()+";"+tNumeroP.getText()+";"+tEmail.getText()+";"+tProfession.getText()+";"+tOrganisation.getText()+";"+tWeb.getText()+";"+tDateNaissance.getText()+";"+tSonnerie.getText()+";"+tSurnom.getText()+";"+v.getFavoris()+";");
-				else
+				else // Ecriture des variables à partir du fichier
 					bFile.write(v.getName()+";"+fileName+";"+v.getLastname()+";"+v.getTelephone()+";"+v.getPortable()+";"+v.getEmail()+";"+v.getProfession()+";"+v.getOrganisation()+";"+v.getWeb()+";"+v.getDateNaissance()+";"+v.getSong()+";"+v.getNickname()+";"+v.getFavoris()+";");
 				
 					
 				bFile.close();
 				
+				// Fermeture de la dialogs
 				if(fileName.equals(""))
 					dgFrame.dispose();
 				
@@ -319,6 +334,7 @@ public class Contact
 	 */	
 	private void setInfos(String mode) 
 	{
+		// En cas d'ajout d'un contact
 		if(mode.equals("set"))
 		{
 			v.setName("name");
@@ -327,10 +343,11 @@ public class Contact
 			v.setDateNaissance("-"); v.setSong("-"); v.setNickname("-"); v.setFavoris("-");
 		}
 		
+		// Vérification des touches utilisées
 		ContactKeyListener myKey = new ContactKeyListener();
 		
-		
-			
+
+	// Initialisation des textboxes et labels selon le mode et l'état avec vérification de touches	
 		tName.setText(v.getName());
 			JLabel	lName = new JLabel("Forname");
 			tName.addKeyListener(myKey);
@@ -401,7 +418,8 @@ public class Contact
 				
 		JLabel lFavoris  = new JLabel("Favoris");;
 			cFavoris.setOpaque(false);
-								
+	
+		// Mise en place de labels pour la bonne harmonie graphique
 		JPanel p1  = new JPanel();	p1.setOpaque(false);
 		JPanel p2  = new JPanel();	p2.setOpaque(false);
 		JPanel p3  = new JPanel();	p3.setOpaque(false);
@@ -417,6 +435,8 @@ public class Contact
 		JPanel sp13  = new JPanel();sp13.setOpaque(false);
 		JPanel sp14  = new JPanel();sp14.setOpaque(false);
 
+		
+		// Attribution des labels et des outils
 		panel_add.add(lName); panel_add.add(p1);
 			p1.add(tName);
 						
@@ -430,9 +450,7 @@ public class Contact
 		panel_add.add(lNumero);	panel_add.add(p4);
 			p4.add(tNumero);
 			p4.add(dtelephone);
-			
-			
-			
+					
 		panel_add.add(lNumeroP); panel_add.add(p5);
 			p5.add(tNumeroP);
 			p5.add(dportable);
@@ -465,22 +483,25 @@ public class Contact
 	}
 
 	/**
-	 * showContact(int i, String substring, String name, String pic, String url)
+	 * showContact()
 	 * Affiche les princpales informations des contacts enregistrés
 	 */	
 	private void showContact()
 	{
+		// Prend la première lettre du nom du contact
 		char c = v.getName().substring(0, 1).charAt(0); 
 		
+		// Codex ASCII 
 		int codex = ((int)(c))-65;
 
-		
+		// Initialisation du mouse listener
 		MouseLisenerContact mlcLbl = new MouseLisenerContact();
 		
 		try
 		{
-			if(first[codex] != '"')
+			if(first[codex] != '"') // Si la lettre n'est toujours pas utilisée
 			{
+				// Mise en titre de cette lettre
 				JLabel title = new JLabel(v.getName().substring(0, 1));
 				panel_contacts.add(title);
 				
@@ -489,16 +510,20 @@ public class Contact
 				
 				title.setForeground(SystemColor.control);
 				title.setFont(new Font("Tahoma", Font.BOLD, 20));
+				
+				// Supression de la lettre dans le tableau
 				first[codex] = '"';
 			}
 		}
 		catch (ArrayIndexOutOfBoundsException a) 
 		{
-			System.out.println("Nom non conforme");
+			System.out.println("Nom non-conforme");
 		}
 		
+		// Label abritant le nom et la photo du contacts
 		lblPic = new JLabel(v.getName());
 
+		// Ajout du contact
 		panel_contacts.add(lblPic);
 		lblPic.setForeground(SystemColor.control);
 		
@@ -506,18 +531,20 @@ public class Contact
 		
 		ImageIcon imageIcon;
 		
+		// Si l'image est un fichier
 		if(f.isFile())
 		{
-			imageIcon = new ImageIcon(v.getPic()); // load the image to a imageIcon
+			imageIcon = new ImageIcon(v.getPic()); // Appel de l'image en question
 		}
 		else
 		{
-			imageIcon = (new ImageIcon(Contact.class.getResource("/img/default.PNG")));
+			imageIcon = (new ImageIcon(Contact.class.getResource("/img/default.PNG"))); // Mise en place d'une image par default
 		}
-		Image image = imageIcon.getImage(); // transform it 
-		Image newimg = image.getScaledInstance(45, 45,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-		lblPic.setIcon(new ImageIcon(newimg)); // transform it back
+		Image image = imageIcon.getImage(); // Casting
+		Image newimg = image.getScaledInstance(45, 45,  java.awt.Image.SCALE_SMOOTH); // Mise en place s
+		lblPic.setIcon(new ImageIcon(newimg)); // Casting retour
 	
+		// Chaque contact peut être actionné avec la souris
 		lblPic.addMouseListener(mlcLbl);
 	}
 
@@ -545,7 +572,7 @@ public class Contact
 		lblFavoris.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFavoris.setIcon(new ImageIcon(Contact.class.getResource("/img/favorisSubmit.PNG")));
 		
-
+		// Transformation des labels en boutons
 		MouseLisenerContact mlc = new MouseLisenerContact();
 		lblAdd.addMouseListener(mlc);
 		lblContact.addMouseListener(mlc);
@@ -560,6 +587,7 @@ public class Contact
 	 */	
 	private void tools_beta_add(Icon icon)
 	{
+		// Affichage du nom et de l'icone du contact sélectionné
 		JLabel lblLooking = new JLabel(v.getName());
 		lblLooking.setIcon(icon);
 
@@ -586,7 +614,7 @@ public class Contact
 		lblComeBack.setHorizontalAlignment(SwingConstants.CENTER);
 		lblComeBack.setIcon(new ImageIcon(Contact.class.getResource("/img/backSubmit.PNG")));
 
-		
+		// Transformation des labels en boutons
 		MouseLisenerContact mlc = new MouseLisenerContact();
 		lblModifier.addMouseListener(mlc);
 		lblDelete.addMouseListener(mlc);
@@ -625,6 +653,8 @@ public class Contact
 			{
 				frame.dispose();				
 				@SuppressWarnings("unused")
+				
+				// Ouverture de la fenètre hierarchiquement plus faible
 				Index i = new Index();
 			}			
 		}
@@ -639,17 +669,19 @@ public class Contact
 	{
 		public void actionPerformed(ActionEvent e)
 		{
+			// En cas de sauvegarde d'une modification au contact
 			if(e.getSource() == submitSave)
 			{
-				fileWriter("");	
+				fileWriter("");	 // Ecriture de la modification
 				
 				panel_contacts.removeAll();
 				panel_contacts.repaint();
 				
-				file(url, "show");
+				file(url, "show"); // Affichage des contacts
 			}
 			else
 			{	
+				// En cas de fermeture (revenir en arrière)
 				int reponse = JOptionPane.showConfirmDialog(null,"Voulez-vous réellement quitter sans sauver ?");
 			
 				if(reponse == JOptionPane.YES_OPTION)
@@ -668,8 +700,7 @@ public class Contact
 	 */	
 	class ContactKeyListener extends KeyAdapter
 	{
-
-
+		// En cas de l'utilisation du ;
 		@Override
 		public void keyTyped(KeyEvent e) 
 		{
@@ -678,6 +709,7 @@ public class Contact
 		}
 
 	}
+	
 	/**
 	 * MouseLisenerContact
 	 * En cas d'enclenchement de la souris
@@ -687,8 +719,10 @@ public class Contact
 		@Override
 		public void mouseClicked(MouseEvent myMouse)
 		{
+			// En cas d'appel depuis la galerie
 			if(t)
 			{
+				// Modification du contact choisi avec l'image choisie
 				JLabel objectLbl = (JLabel) myMouse.getSource();
 				v.setName(objectLbl.getText());	
 				fileUnique(url, v.getName(), imageContact);
@@ -697,48 +731,54 @@ public class Contact
 			}
 			else
 			{
-				
+				// En cas d'appel du bouton add
 				if(myMouse.getSource() == lblAdd)
 				{
-					ChangeContact("adding");
+					ChangeContact("adding"); // Affiche la dialog d'ajout
 				}
+				// En cas d'appel du bouton favori
 				else if(myMouse.getSource() == lblFavoris)
 				{
-					file(url, "favoris");
+					file(url, "favoris"); // affiche les favoris
 				}
+				// En cas d'appel du bouton contact
 				else if(myMouse.getSource() == lblContact)
 				{
-					file(url, "show");
+					file(url, "show"); // Affiche les contacts
 				}
+				// En cas d'appel du bouton comeback				
 				else if(myMouse.getSource() == lblComeBack)
 				{
 					panel_tools.removeAll();
-						tools_alpha_add();
+						tools_alpha_add(); // Appel les outils primaires
 					panel_tools.repaint();
 				}
+				// En cas d'appel du bouton delete				
 				else if(myMouse.getSource() == lblDelete)
 				{
-					fileUnique(url, v.getName(), "delete");
+					fileUnique(url, v.getName(), "delete"); // Supprime le contact en question
 					
 					panel_tools.removeAll();
-						tools_alpha_add();
+						tools_alpha_add(); // Appel les outils primaires
 					panel_tools.repaint();
 				
-					file(url, "show");
+					file(url, "show"); // Affiche les contacts
 				}
+				// En cas d'appel du bouton modifier
 				else if(myMouse.getSource() == lblModifier)
 				{
-					fileUnique(url, v.getName(), "modify");
+					fileUnique(url, v.getName(), "modify"); // Identifie le contact à modifier et modification
 					
 					panel_tools.removeAll();
-						tools_alpha_add();
+						tools_alpha_add(); // Appel des outils primaires
 					panel_tools.repaint();
 	
-					file(url, "show");
+					file(url, "show"); // Affichage des contacts
 				}
+				// En cas d'appel du browser d'image
 				else if(myMouse.getSource() == sPicBrowse)
 				{
-					
+					// Initialise le FileChooser
 				    JFileChooser chooser = new JFileChooser();
 				    chooser.setCurrentDirectory(new java.io.File(url+"\\img\\"));
 		            chooser.setDialogTitle("Browse the folder to process");
@@ -757,9 +797,10 @@ public class Contact
 						
 					}
 				}
+				// En cas d'appel du browser de chansons
 				else if(myMouse.getSource() == sSongBrowse)
 				{
-					
+					// Initialise le FileChooser
 				    JFileChooser chooser = new JFileChooser();
 				    chooser.setCurrentDirectory(new java.io.File(url+"\\songs\\"));
 		            chooser.setDialogTitle("Browse the folder to process");
@@ -776,25 +817,30 @@ public class Contact
 						
 					}
 				}
+				
+				// En cas d'appel du bouton supression email
 				else if(myMouse.getSource() == demail)
 				{
 					tEmail.setText("-");
 				}
+				// En cas d'appel du bouton supression portable				
 				else if(myMouse.getSource() == dportable)
 				{
 					tNumeroP.setText("-");	
 				}
+				// En cas d'appel du bouton supression telephone				
 				else if(myMouse.getSource() == dtelephone)
 				{
 					tNumero.setText("-");	
 				}
+				// En cas d'appel d'un contact				
 				else
 				{
-					JLabel objectLbl = (JLabel) myMouse.getSource();
-					v.setName(objectLbl.getText());
+					JLabel objectLbl = (JLabel) myMouse.getSource(); // Identifie le contact
+					v.setName(objectLbl.getText()); // Initialisation du nom
 					
 					panel_tools.removeAll();
-						tools_beta_add(objectLbl.getIcon());
+						tools_beta_add(objectLbl.getIcon()); // Appel les outils secondaires.
 					panel_tools.repaint();
 				}
 			}
@@ -811,35 +857,39 @@ public class Contact
 	{
 		try
 		{
-			File directory = new File(url);
+			File directory = new File(url); // Dossier de l'url primaire
 			
 			panel_contacts.removeAll();
 			panel_contacts.repaint();	
 			
+			// Création d'un tableau alphabétique
 			char c = 'A';
 			for (int x = 0; x <= 25; x++) 
 				first[x] = c; c++;
 			
 			if(directory.isDirectory())
 			{
+				// Liste des fichiers du dossier
 				File[] contatcs = directory.listFiles();
 				
 				for (int i = 0; i < contatcs.length; i++) 
 				{
+					// Vérification du txt
 					if(contatcs[i].getAbsolutePath().substring(contatcs[i].getAbsolutePath().length()-3, contatcs[i].getAbsolutePath().length()).equals("txt"))
 					{
 						if(contatcs[i].isFile())
 						{
+							// Initialisation des variables selon le fichier
 							setVariablesByFile(contatcs[i]);
 							
-							if(action.equals("show"))
+							if(action.equals("show")) // mode : show
 							{
-								showContact();
+								showContact(); // Affiche les contacts
 							}
-							else if(action.equals("favoris"))
+							else if(action.equals("favoris")) // mode : favoris
 							{						
 								if(v.getFavoris().equals("1"))
-									showContact();
+									showContact(); // Affiche les contacts favoris
 							}						
 						}
 					}
@@ -862,30 +912,32 @@ public class Contact
 	 */	
 	private void fileUnique(String url, String fileName, String mode) 
 	{
-		File directory = new File(url);
+		File directory = new File(url); // Dossier de l'url primaire
 			if(directory.isDirectory())
 			{
+				// Liste des fichiers du dossier
 				File[] contatcs = directory.listFiles();
 				
 				for (int i = 0; i < contatcs.length; i++) 
 				{
 					if(contatcs[i].isFile())
 					{
+						// Identifiation du fichier de configuration selon le contact
 						if(contatcs[i].getName().equals(fileName+".txt"))
 						{
-							if(mode.equals("modify"))
+							if(mode.equals("modify")) // mode : modify
 							{	
-								setVariablesByFile(contatcs[i]);
-								ChangeContact("modify");
+								setVariablesByFile(contatcs[i]); // Appel des variables du contact
+								ChangeContact("modify"); // Appel la dialog avec les informations
 							}
-							else if(mode.equals("delete"))
+							else if(mode.equals("delete")) // mode : delete
 							{
-								contatcs[i].delete();
+								contatcs[i].delete(); // supprimme le contact
 							}
-							else
+							else // mode : -
 							{
-								setVariablesByFile(contatcs[i]);
-								fileWriter(mode);
+								setVariablesByFile(contatcs[i]); // Appel des variables du contact (Changement de la photo)
+								fileWriter(mode); // Ecris la contact avec la nouvelle photo.
 							}
 						}
 					}					
@@ -893,6 +945,7 @@ public class Contact
 			}
 		
 	}
+	
 	/**
 	 * setVariablesByFile(File myFileToSet)
 	 * @param File myFileToSet	- File to use
@@ -900,13 +953,16 @@ public class Contact
 	 */
 	private void setVariablesByFile(File myFileToSet)
 	{
+		// Incrémentation des distances entre chaque variable de la chaîne result
 		int inc, inc_save; String result;
 
 		try 
 		{
 			FileReader 		rFile 	= new FileReader(myFileToSet);					
 			BufferedReader 	bFile 	= new BufferedReader(rFile);
-				
+			
+			// Décortique result grâce aux ";" et appel le setter de chaque variable.
+			
 				result 		= bFile.readLine();
 				
 				inc			= result.indexOf(";", 0);

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package src.Smartphone;
+package JUnit;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -18,28 +18,37 @@ class TestContact extends Contact
 {
 
 	/**
-	 * Test method for {@link Smartphone.Contact#main(java.lang.String[])}.
+	 * Test Directory
 	 */
 	@Test
-	void testMain() 
+	void testDiretoryConfigurations() 
 	{
-		@SuppressWarnings("unused")
-		Contact c = new Contact();
-	}
-
-	/**
-	 * Test method for {@link Smartphone.Contact#Contact()}.
-	 */
-	@Test
-	void testContact()
-	{
-		File f = new File("C:\\Smartphone");
-		if(!f.isDirectory())
+		File directory = new File("C:\\Smartphone");
+		if(!directory.isDirectory())
+		{
 			fail("Not a Directory");
+		}
 	}
-
+	
 	/**
-	 * Test method for {@link Smartphone.Contact#Contact(java.lang.String)}.
+	 * Test URL
+	 */
+	@Test
+	void testURLConfigurations() 
+	{
+		File directory = new File("C:\\Smartphone");
+		File url = new File("C:\\Smartphone", "url.txt");
+		if(!directory.isDirectory())
+			fail("Not a Directory");
+		else
+		{
+			if(!url.isFile())
+				fail("Not a File");
+		}
+	}
+		
+	/**
+	 * Test class Contact
 	 */
 	@Test
 	void testContactString() 
@@ -52,5 +61,4 @@ class TestContact extends Contact
 		if(!f.isDirectory())
 			fail("Not a Directory");
 	}
-
 }
