@@ -225,6 +225,18 @@ public class Index
 					lblDirectory.setText("");
 					url = getUrl();
 				}
+				
+				try
+				{
+					if(getUrl().isEmpty())
+					{
+						setUrl("C:\\Smartphone");
+					}
+				}
+				catch (Exception e) 
+				{
+					setUrl("C:\\Smartphone");
+				}
 			}
 		}
 	}
