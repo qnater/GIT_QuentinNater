@@ -228,9 +228,10 @@ public class Galerie
 						{
 							imageIcon = new ImageIcon(contatcs[i].getAbsolutePath()); // Casting
 							image = imageIcon.getImage(); // Transformation
-							newimg = image.getScaledInstance(150, 150,  java.awt.Image.SCALE_SMOOTH); // Mise en place graphique
+							newimg = image.getScaledInstance(135, 135,  java.awt.Image.SCALE_SMOOTH); // Mise en place graphique
 							
 							lblPic.setIcon(new ImageIcon(newimg)); // Retour en icone
+							lblPic.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 5));
 							
 							// Affichage de l'image
 							panel_galeries.add(lblPic);

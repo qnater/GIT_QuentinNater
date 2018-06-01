@@ -13,7 +13,7 @@ public class Index
 	private JPanel panel_south = new JPanel();
 	
 	// URL primaire
-	private String url = "C:\\Smartphone";
+	private String url = "C:\\Smartphone\\url";
 	
 	// Labels utilisés comme outils
 	private JLabel	lblContact;
@@ -111,13 +111,21 @@ public class Index
 			// Vérification du chemin enregistré.
 			try 
 			{
-				File fUrl = new File("C:\\Smartphone"); // Dossier de config.
+				File fUrl = new File("C:\\Smartphone\\url"); // Dossier de config.
 				if(!fUrl.exists())
 					fUrl.mkdirs();
 				
 				File fLink = new File(fUrl, "url.txt"); // Fichier de config.
 				if(!fLink.exists() || !fLink.isFile())
+				{
 					fLink.createNewFile();
+					// Flux de base (pour voir)
+					FileWriter flowfile = new FileWriter(fLink);
+					// Flux Tampon (englobe le flux de base).
+					BufferedWriter 	bwrite= new BufferedWriter(flowfile);
+					bwrite.write(url);
+					bwrite.close();
+				}
 				
 				// Flux de base (pour voir)
 				FileReader flowfile = new FileReader(fLink); // Lecture du fichier
@@ -194,7 +202,7 @@ public class Index
 					
 						try 
 						{
-							File fLink = new File("C:\\Smartphone", "url.txt");
+							File fLink = new File("C:\\Smartphone\\url", "url.txt");
 							
 							// Flux de base (pour voir)
 							FileWriter flowfile = new FileWriter(fLink);

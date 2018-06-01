@@ -28,7 +28,6 @@ public class Contact
 	private	JPanel panel_north = new JPanel();
 	private	JPanel panel_south = new JPanel();
 	
-	// JPanel (Page de modification, d'ajout et d'outils)
 	private JPanel panel_adding;
 	private JPanel panel_add;
 	private JPanel panel_tools;
@@ -56,6 +55,8 @@ public class Contact
 	// Appel des autres classes
 	private boolean t;
 	private String imageContact;
+	private int height = -1;
+	private int inc = 0;
 	
 	// Textbox (infos contacts)
 	private JTextField tName = new JTextField(19);	
@@ -159,20 +160,15 @@ public class Contact
 						
 			// Taille du GridLayout
 			File[] contatcs = directory.listFiles();			
-
-			int height = contatcs.length*2;			
-			try
-			{
-				if(height < 10)
-					height = 10;
-				
-				panel_contacts.setLayout(new GridLayout(height, 1));
-			}
-			catch (Exception e) 
-			{
-				
-			}
 			
+			height=0; 
+			for (int i = 0; i < contatcs.length; i++) 
+			{
+				if(contatcs[i].getAbsolutePath().substring(contatcs[i].getAbsolutePath().length()-3, contatcs[i].getAbsolutePath().length()).equals("txt"))
+					height++;
+			}
+
+						
 		// Configuration du panel des outils
 		panel_tools = new JPanel();
 		panel_tools.setPreferredSize(new Dimension(10, 100));
@@ -270,7 +266,7 @@ public class Contact
 	 */	
 	private void fileWriter(String fileName) 
 	{
-		// Création d'un directory avec l'url enregistrée.
+		// Création d'un directory avec l'url enregistré.
 		File directory = new File(url);
 		
 		// Si l'url est valide
@@ -281,15 +277,19 @@ public class Contact
 				File myNewFile; // Initialisation d'un fichier
 				
 				// Ecriture du fichier en question, selon le nom donné
-				if(fileName.equals(""))	// Ajout normal			
+				if(fileName.equals(""))	// Ajout normal		
+				{
 					myNewFile = new File(directory, tName.getText()+".txt");
+					tName.setText(tName.getText().substring(0, 1).toUpperCase()+tName.getText().substring(1, tName.getText().length()));
+				}
 				else // Photo de la galerie
 					myNewFile = new File(directory, v.getName() +".txt");
 				
 				myNewFile.createNewFile();
-				
+								
 				FileWriter 		wFile 	= new FileWriter(myNewFile);					
 				BufferedWriter 	bFile 	= new BufferedWriter(wFile);
+				
 				
 				// Vérification de la checkbox favori
 				if(cFavoris.isSelected())
@@ -299,9 +299,9 @@ public class Contact
 				
 				
 				if(fileName.equals("")) // Ecriture des variables à partir des textboxes
-					bFile.write(tName.getText()+";"+tPicture.getText()+";"+tLastname.getText()+";"+tNumero.getText()+";"+tNumeroP.getText()+";"+tEmail.getText()+";"+tProfession.getText()+";"+tOrganisation.getText()+";"+tWeb.getText()+";"+tDateNaissance.getText()+";"+tSonnerie.getText()+";"+tSurnom.getText()+";"+v.getFavoris()+";");
+					bFile.write("smart.conf;"+tName.getText()+";"+tPicture.getText()+";"+tLastname.getText()+";"+tNumero.getText()+";"+tNumeroP.getText()+";"+tEmail.getText()+";"+tProfession.getText()+";"+tOrganisation.getText()+";"+tWeb.getText()+";"+tDateNaissance.getText()+";"+tSonnerie.getText()+";"+tSurnom.getText()+";"+v.getFavoris()+";");
 				else // Ecriture des variables à partir du fichier
-					bFile.write(v.getName()+";"+fileName+";"+v.getLastname()+";"+v.getTelephone()+";"+v.getPortable()+";"+v.getEmail()+";"+v.getProfession()+";"+v.getOrganisation()+";"+v.getWeb()+";"+v.getDateNaissance()+";"+v.getSong()+";"+v.getNickname()+";"+v.getFavoris()+";");
+					bFile.write("smart.conf;"+v.getName()+";"+fileName+";"+v.getLastname()+";"+v.getTelephone()+";"+v.getPortable()+";"+v.getEmail()+";"+v.getProfession()+";"+v.getOrganisation()+";"+v.getWeb()+";"+v.getDateNaissance()+";"+v.getSong()+";"+v.getNickname()+";"+v.getFavoris()+";");
 				
 					
 				bFile.close();
@@ -351,7 +351,11 @@ public class Contact
 		tName.setText(v.getName());
 			JLabel	lName = new JLabel("Forname");
 			tName.addKeyListener(myKey);
-				
+		if(!mode.equals("set"))
+			tName.setEditable(false);
+		else
+			tName.setEditable(true);
+		
 		tPicture.setText(v.getPic());
 			tPicture.addKeyListener(myKey);
 			JLabel	lPicture = new JLabel("Picture");
@@ -493,10 +497,10 @@ public class Contact
 		
 		// Codex ASCII 
 		int codex = ((int)(c))-65;
-
+				
 		// Initialisation du mouse listener
 		MouseLisenerContact mlcLbl = new MouseLisenerContact();
-		
+
 		try
 		{
 			if(first[codex] != '"') // Si la lettre n'est toujours pas utilisée
@@ -513,13 +517,26 @@ public class Contact
 				
 				// Supression de la lettre dans le tableau
 				first[codex] = '"';
+				
+				if(inc==0)
+					height++; // Augmentation du layout pour chaque entête
 			}
+			
 		}
 		catch (ArrayIndexOutOfBoundsException a) 
 		{
 			System.out.println("Nom non-conforme");
 		}
 		
+		
+		try
+		{	
+			panel_contacts.setLayout(new GridLayout(height,0));
+		}
+		catch (Exception e) 
+		{
+			System.out.println("Problème de redimentionnement du layout");
+		}
 		// Label abritant le nom et la photo du contacts
 		lblPic = new JLabel(v.getName());
 
@@ -677,6 +694,8 @@ public class Contact
 				panel_contacts.removeAll();
 				panel_contacts.repaint();
 				
+				// Augmentation du layout pour chaque ajout
+				height = height+2;
 				file(url, "show"); // Affichage des contacts
 			}
 			else
@@ -757,6 +776,7 @@ public class Contact
 				else if(myMouse.getSource() == lblDelete)
 				{
 					fileUnique(url, v.getName(), "delete"); // Supprime le contact en question
+					height = height-2;
 					
 					panel_tools.removeAll();
 						tools_alpha_add(); // Appel les outils primaires
@@ -865,7 +885,9 @@ public class Contact
 			// Création d'un tableau alphabétique
 			char c = 'A';
 			for (int x = 0; x <= 25; x++) 
+			{
 				first[x] = c; c++;
+			}
 			
 			if(directory.isDirectory())
 			{
@@ -894,6 +916,7 @@ public class Contact
 						}
 					}
 				}
+				inc++;
 			}
 			else
 				System.out.println("Erreur - L'URL donnée n'est pas un dossier valide.");		
@@ -933,6 +956,7 @@ public class Contact
 							else if(mode.equals("delete")) // mode : delete
 							{
 								contatcs[i].delete(); // supprimme le contact
+	
 							}
 							else // mode : -
 							{
@@ -954,7 +978,7 @@ public class Contact
 	private void setVariablesByFile(File myFileToSet)
 	{
 		// Incrémentation des distances entre chaque variable de la chaîne result
-		int inc, inc_save; String result;
+		int inc, inc_save; String result; String convert;
 
 		try 
 		{
@@ -963,10 +987,16 @@ public class Contact
 			
 			// Décortique result grâce aux ";" et appel le setter de chaque variable.
 			
-				result 		= bFile.readLine();
+			
+			result 		= bFile.readLine();
+			
+			if(result.substring(0, 10).equals("smart.conf"))
+			{
 				
-				inc			= result.indexOf(";", 0);
-				v.setName(result.substring(0, inc));
+				inc			= result.indexOf(";", 12);
+				convert 	= result.substring(11, inc); 
+				convert		= convert.substring(0, 1).toUpperCase()+convert.substring(1, convert.length());
+				v.setName(convert);
 								
 				inc_save	= result.indexOf(";", inc+1);
 				v.setPic(result.substring(inc+1, inc_save));
@@ -1003,7 +1033,8 @@ public class Contact
 				
 				inc			= result.indexOf(";", inc_save+1);
 				v.setFavoris(result.substring(inc_save+1, inc));
-		
+			}
+			
 			bFile.close();
 		}
 		catch (FileNotFoundException e)
@@ -1011,6 +1042,10 @@ public class Contact
 			e.printStackTrace();
 		}
 		catch (IOException io)
+		{
+			io.printStackTrace();
+		}
+		catch (ArrayIndexOutOfBoundsException io)
 		{
 			io.printStackTrace();
 		}
