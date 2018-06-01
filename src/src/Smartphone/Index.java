@@ -192,6 +192,7 @@ public class Index
 						url = getUrl();
 						lblDirectory.setText("Chemin non-valide");
 						lblDirectory.setForeground(Color.RED);
+						setUrl(url);
 					}
 					else
 					{

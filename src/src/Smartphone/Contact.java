@@ -114,9 +114,10 @@ public class Contact
 	 * @param boolean t : Activation du mode
 	 * Conctructeur de contact qui initialise la fenètre
 	 */	
-	public Contact(String pic, boolean t) 
+	public Contact(String pic, String url, boolean t) 
 	{
 		v.setPic(pic);
+		this.url = url;
 		this.t = t;
 		imageContact = pic;
 		initialize();	
@@ -145,7 +146,14 @@ public class Contact
 		
 		// Création d'une arborescence pour abriter les contacts
 		File directory = new File(url);
-
+		
+		if(!directory.isDirectory())
+		{
+			JOptionPane.showMessageDialog(null, "L'URL donnée non-valide... Redirection vers un dossier valide", "Information URL", 1);
+			url = "C:\\Smartphone";
+			directory = new File(url);
+			
+		}
 		// == PANEL configurations == /
 		
 			// Initialisation du panel principal

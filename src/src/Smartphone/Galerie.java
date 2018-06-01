@@ -286,7 +286,7 @@ public class Galerie
 			{				
 				// Appel de Contact avec un graphisme allégé et le chemin de l'image
 				@SuppressWarnings("unused")
-				Contact c = new Contact(v.getPic(), true);
+				Contact c = new Contact(v.getPic(), url, true);
 			}
 			// Clic sur lblComeBack
 			else if(myMouse.getSource() == lblComeBack)
