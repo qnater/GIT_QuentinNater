@@ -536,7 +536,6 @@ public class Contact
 			System.out.println("Nom non-conforme");
 		}
 		
-		
 		try
 		{	
 			panel_contacts.setLayout(new GridLayout(height,0));
@@ -569,6 +568,7 @@ public class Contact
 		Image newimg = image.getScaledInstance(45, 45,  java.awt.Image.SCALE_SMOOTH); // Mise en place s
 		lblPic.setIcon(new ImageIcon(newimg)); // Casting retour
 	
+		
 		// Chaque contact peut être actionné avec la souris
 		lblPic.addMouseListener(mlcLbl);
 	}
@@ -731,10 +731,19 @@ public class Contact
 		@Override
 		public void keyTyped(KeyEvent e) 
 		{
+			// En cas d'utilisation du ;
 			if(e.getKeyChar() == ';')
 				e.setKeyChar(',');
+			
+			
+			// En cas d'utilisation de caractères spéciaux
+			int ascii = (int)(e.getKeyChar());			
+			if((ascii > 31  && ascii < 65 || ascii > 122) )
+			{
+				JOptionPane.showMessageDialog(null, e.getKeyChar() + "  : Caractère non-valide", "Caractère non-valide", 1);
+				e.setKeyChar('a');
+			}
 		}
-
 	}
 	
 	/**
@@ -746,6 +755,7 @@ public class Contact
 		@Override
 		public void mouseClicked(MouseEvent myMouse)
 		{
+
 			// En cas d'appel depuis la galerie
 			if(t)
 			{
@@ -866,7 +876,7 @@ public class Contact
 				{
 					JLabel objectLbl = (JLabel) myMouse.getSource(); // Identifie le contact
 					v.setName(objectLbl.getText()); // Initialisation du nom
-					
+
 					panel_tools.removeAll();
 						tools_beta_add(objectLbl.getIcon()); // Appel les outils secondaires.
 					panel_tools.repaint();
