@@ -23,6 +23,7 @@ public class Contact
 	private JLabel lblModifier;
 	private JLabel lblComeBack;
 	private JLabel lblPic;
+	private JLabel lIndex;
 	
 	// Panels du Header et du Footer
 	private	JPanel panel_north = new JPanel();
@@ -30,6 +31,7 @@ public class Contact
 	
 	private JPanel panel_adding;
 	private JPanel panel_add;
+	private JPanel panel_add_pic;
 	private JPanel panel_tools;
 	
 	// URL primaire des fichiers de configurations 
@@ -55,6 +57,7 @@ public class Contact
 	// Appel des autres classes
 	private boolean t;
 	private String imageContact;
+	private String modal;
 	private int height = -1;
 	private int inc = 0;
 	
@@ -231,6 +234,7 @@ public class Contact
 		// Initialisation des panels
 		panel_adding 	= new JPanel();
 		panel_add 		= new JPanel();	
+		panel_add_pic	= new JPanel();	
 		JPanel panel_save = new JPanel();
 		dgFrame.add(panel_save, BorderLayout.SOUTH);
 		panel_save.setLayout(new GridLayout(0, 2));
@@ -249,11 +253,14 @@ public class Contact
 		// Ajout des panels dans le dialog	
 		dgFrame.add(panel_adding, BorderLayout.CENTER);
 			panel_adding.setLayout(new BorderLayout(0, 0));
+			panel_adding.add(panel_add_pic, BorderLayout.NORTH);
 			panel_adding.add(panel_add, BorderLayout.CENTER);
 		
 		// Initialisation de la sroll bar
 		panel_adding.setAutoscrolls(true);
 		adding.Scroll(panel_add, panel_adding);
+		
+		panel_add_pic.setLayout(new BorderLayout(0,0));
 		panel_add.setLayout(new GridLayout(13, 2));
 		panel_add.setBackground(SystemColor.scrollbar);
 		
@@ -284,21 +291,41 @@ public class Contact
 			{
 				File myNewFile; // Initialisation d'un fichier
 				
+				// Application de la première lettre du Nom en majuscule
+				tName.setText(tName.getText().substring(0, 1).toUpperCase()+tName.getText().substring(1, tName.getText().length()));
+				
 				// Ecriture du fichier en question, selon le nom donné
 				if(fileName.equals(""))	// Ajout normal		
 				{
-					myNewFile = new File(directory, tName.getText()+".txt");
-					tName.setText(tName.getText().substring(0, 1).toUpperCase()+tName.getText().substring(1, tName.getText().length()));
+					// En cas d'ajout (création)
+					if(modal.equals("set") )
+					{
+						
+						myNewFile = new File(directory, tName.getText()+".txt");
+						
+						int inc = 0; // Vérification en cas de deux noms équivalents
+						while(myNewFile.exists())
+						{
+							inc++;	tName.setText(tName.getText() + inc);							
+							myNewFile = new File(directory, tName.getText()+".txt");
+						}	
+					}
+					else
+					{					
+						myNewFile = new File(directory, tName.getText()+".txt");
+					}
 				}
 				else // Photo de la galerie
+				{				
 					myNewFile = new File(directory, v.getName() +".txt");
+				}
+					
 				
 				myNewFile.createNewFile();
 								
 				FileWriter 		wFile 	= new FileWriter(myNewFile);					
 				BufferedWriter 	bFile 	= new BufferedWriter(wFile);
-				
-				
+								
 				// Vérification de la checkbox favori
 				if(cFavoris.isSelected())
 					v.setFavoris("1");
@@ -321,17 +348,12 @@ public class Contact
 			} 
 			catch (IOException e)
 			{
-				e.printStackTrace();
+				new Log(e.getMessage(), "Writer (File no write)", "Contact");  // Génération du log
 			}
 			catch (NullPointerException npe)
 			{
-				System.out.println("Erreur avec les données des textboxes");
-				npe.printStackTrace();
+				new Log(npe.getMessage(), "Writer (Textboxes mistake)", "Contact");  // Génération du log
 			}
-		}
-		else
-		{
-			System.out.println("Le répertoire d'écriture n'est pas un dossier...");
 		}
 	}	
 	
@@ -342,6 +364,9 @@ public class Contact
 	 */	
 	private void setInfos(String mode) 
 	{
+		// Set the picture of the contact
+		setIconContact();		
+		
 		// En cas d'ajout d'un contact
 		if(mode.equals("set"))
 		{
@@ -349,12 +374,16 @@ public class Contact
 			v.setPic("-");	v.setLastname("-");	v.setTelephone("-"); v.setPortable("-");
 			v.setEmail("-"); v.setProfession("-"); v.setOrganisation("-");	v.setWeb("-");
 			v.setDateNaissance("-"); v.setSong("-"); v.setNickname("-"); v.setFavoris("-");
+			modal = "set";
 		}
-		
+		else
+			modal = "use";
+				
 		// Vérification des touches utilisées
 		ContactKeyListener myKey = new ContactKeyListener();
 		
-
+		dgFrame.addMouseListener(new MouseLisenerContact());
+		
 	// Initialisation des textboxes et labels selon le mode et l'état avec vérification de touches	
 		tName.setText(v.getName());
 			JLabel	lName = new JLabel("Forname");
@@ -430,8 +459,14 @@ public class Contact
 				
 		JLabel lFavoris  = new JLabel("Favoris");;
 			cFavoris.setOpaque(false);
+			
+			if(v.getFavoris().equals("1"))
+				cFavoris.setSelected(true);
+			else
+				cFavoris.setSelected(false);
 	
 		// Mise en place de labels pour la bonne harmonie graphique
+		
 		JPanel p1  = new JPanel();	p1.setOpaque(false);
 		JPanel p2  = new JPanel();	p2.setOpaque(false);
 		JPanel p3  = new JPanel();	p3.setOpaque(false);
@@ -495,6 +530,53 @@ public class Contact
 	}
 
 	/**
+	 * setIconContact()
+	 * Affiche l'icone sélectionnée dans le menu du contact
+	 */	
+	private void setIconContact() 
+	{
+		// Suppression du vieux panel
+		panel_add_pic.removeAll();
+		
+		// Initilisation de l'image
+		ImageIcon imageIcon;
+		Image image, newimg;
+		
+		// Si le contact ne possède pas une photo
+		if(v.getPic().equals("-") || v.getPic().equals("") )
+		{
+			imageIcon = (new ImageIcon(Contact.class.getResource("/img/default.PNG"))); // Mise en place d'une image par default
+		}
+		else
+		{
+			imageIcon = new ImageIcon(v.getPic()); // Casting
+		}
+		
+		// Mise en forme et casting de l'image
+		image = imageIcon.getImage(); // Transformation
+		newimg = image.getScaledInstance(155, 155,  java.awt.Image.SCALE_SMOOTH); // Mise en place graphique
+		
+		// Initilisation du label
+		lIndex = new JLabel();		
+		
+		// Attribution de l'image en icone du label
+		lIndex.setIcon(new ImageIcon(newimg)); // Retour en icone
+		
+		// Mise en forme du panel
+		panel_add_pic.setBackground(SystemColor.scrollbar);
+		panel_add_pic.add(lIndex, BorderLayout.CENTER);
+		
+		// Mise en forme du label
+		lIndex.setHorizontalAlignment(SwingConstants.CENTER);
+		lIndex.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		
+		lIndex.addMouseListener(new MouseLisenerContact());
+		
+		// Rafraichissement du panel
+		panel_add_pic.repaint();
+	}
+
+	/**
 	 * showContact()
 	 * Affiche les princpales informations des contacts enregistrés
 	 */	
@@ -533,7 +615,7 @@ public class Contact
 		}
 		catch (ArrayIndexOutOfBoundsException a) 
 		{
-			System.out.println("Nom non-conforme");
+			new Log(a.getMessage(), "Show Contact (Wrong Name of file)", "Contact");  // Génération du log
 		}
 		
 		try
@@ -542,7 +624,7 @@ public class Contact
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Problème de redimentionnement du layout");
+			new Log(e.getMessage(), "GridLayout (GridLayout height's problem)", "Contact");  // Génération du log
 		}
 		// Label abritant le nom et la photo du contacts
 		lblPic = new JLabel(v.getName());
@@ -736,12 +818,15 @@ public class Contact
 				e.setKeyChar(',');
 			
 			
-			// En cas d'utilisation de caractères spéciaux
-			int ascii = (int)(e.getKeyChar());			
-			if((ascii > 31  && ascii < 65 || ascii > 122) )
+			// En cas d'utilisation de caractères spéciaux pour les noms
+			if(e.getSource() == tName)
 			{
-				JOptionPane.showMessageDialog(null, e.getKeyChar() + "  : Caractère non-valide", "Caractère non-valide", 1);
-				e.setKeyChar('a');
+				int ascii = (int)(e.getKeyChar());			
+				if((ascii > 31  && ascii < 65 || ascii > 122) )
+				{
+					JOptionPane.showMessageDialog(null, e.getKeyChar() + "  : Caractère non-valide", "Caractère non-valide", 1);
+					e.setKeyChar('a');
+				}
 			}
 		}
 	}
@@ -755,7 +840,6 @@ public class Contact
 		@Override
 		public void mouseClicked(MouseEvent myMouse)
 		{
-
 			// En cas d'appel depuis la galerie
 			if(t)
 			{
@@ -794,7 +878,7 @@ public class Contact
 				else if(myMouse.getSource() == lblDelete)
 				{
 					fileUnique(url, v.getName(), "delete"); // Supprime le contact en question
-					height = height-2;
+					height = height-1;
 					
 					panel_tools.removeAll();
 						tools_alpha_add(); // Appel les outils primaires
@@ -814,7 +898,7 @@ public class Contact
 					file(url, "show"); // Affichage des contacts
 				}
 				// En cas d'appel du browser d'image
-				else if(myMouse.getSource() == sPicBrowse)
+				else if(myMouse.getSource() == sPicBrowse || myMouse.getSource() == lIndex)
 				{
 					// Initialise le FileChooser
 				    JFileChooser chooser = new JFileChooser();
@@ -828,11 +912,12 @@ public class Contact
 		            {
 			            chooser.showOpenDialog(null);
 			            v.setPic(chooser.getSelectedFile().toString());
-			            tPicture.setText(v.getPic()); 
+			            tPicture.setText(v.getPic());    
+			            setIconContact();
 		            }
 		            catch (Exception e)
 		            {
-						
+		            	new Log(e.getMessage(), "Image Browser", "Contact");  // Génération du log
 					}
 				}
 				// En cas d'appel du browser de chansons
@@ -852,7 +937,7 @@ public class Contact
 		            }
 		            catch (Exception e)
 		            {
-						
+		            	new Log(e.getMessage(), "Song Browser", "Contact");  // Génération du log
 					}
 				}
 				
@@ -874,16 +959,23 @@ public class Contact
 				// En cas d'appel d'un contact				
 				else
 				{
-					JLabel objectLbl = (JLabel) myMouse.getSource(); // Identifie le contact
-					v.setName(objectLbl.getText()); // Initialisation du nom
-
-					panel_tools.removeAll();
-						tools_beta_add(objectLbl.getIcon()); // Appel les outils secondaires.
-					panel_tools.repaint();
+					try
+					{
+							
+						JLabel objectLbl = (JLabel) myMouse.getSource(); // Identifie le contact
+						v.setName(objectLbl.getText()); // Initialisation du nom
+	
+						panel_tools.removeAll();
+							tools_beta_add(objectLbl.getIcon()); // Appel les outils secondaires.
+						panel_tools.repaint();
+					}
+					catch (Exception e) 
+					{
+						new Log(e.getMessage(), "Clic not in label", "Contact");  // Génération du log
+					}
 				}
 			}
 		}
-
 	}
 	
 	/**
@@ -936,12 +1028,10 @@ public class Contact
 				}
 				inc++;
 			}
-			else
-				System.out.println("Erreur - L'URL donnée n'est pas un dossier valide.");		
 		}
 		catch(Exception e)
 		{
-				// Erreur de lecture du fichier
+			new Log(e.getMessage(), "Show File", "Contact");  // Génération du log
 		}
 	}
 	
@@ -974,7 +1064,6 @@ public class Contact
 							else if(mode.equals("delete")) // mode : delete
 							{
 								contatcs[i].delete(); // supprimme le contact
-	
 							}
 							else // mode : -
 							{
@@ -1057,15 +1146,15 @@ public class Contact
 		}
 		catch (FileNotFoundException e)
 		{
-			e.printStackTrace();
+			new Log(e.getMessage(), "Set Variables (No Variable)", "Contact"); // Génération du log
 		}
 		catch (IOException io)
 		{
-			io.printStackTrace();
+			new Log(io.getMessage(), "Set Variables (File Location)", "Contact");  // Génération du log
 		}
 		catch (ArrayIndexOutOfBoundsException io)
 		{
-			io.printStackTrace();
+			new Log(io.getMessage(), "Set Variables (Array Failed with ;)", "Contact");  // Génération du log
 		}
 	}
 }

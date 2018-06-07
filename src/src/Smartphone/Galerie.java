@@ -136,10 +136,9 @@ public class Galerie
 			}
 			catch (Exception e) 
 			{
-				
+				new Log(e.getMessage(), "Galerie : GridLayout (height)", "Galerie");  // Génération du log
 			}
 			
-		
 		// Appel des outils primaires
 		tools_alpha_add();
 			
@@ -244,13 +243,11 @@ public class Galerie
 				}
 				catch(Exception e)
 				{
-					System.out.println("Picture Name");
+					new Log(e.getMessage(), "Galerie : File (Picture Name)", "Galerie");  // Génération du log
 				}			
 			}
 		}
-		else
-			System.out.println("Erreur - L'URL donnée n'est pas un dossier valide.");		
-	
+
 		panel_galeries.repaint();
 	}
 	
@@ -328,10 +325,12 @@ public class Galerie
 			        }					
 					catch (IOException e1)
 		            {
-						JOptionPane.showMessageDialog(frame,"Error - Failed Path\nDirectory Fail (Erreur C002)", "Failed Path", JOptionPane.ERROR_MESSAGE);  
+						JOptionPane.showMessageDialog(frame,"Error - Failed Path\nDirectory Fail (Erreur C002)", "Failed Path", JOptionPane.ERROR_MESSAGE);
+						new Log(e1.getMessage(), "Galerie : Adding (Directory Failed)", "Galerie");  // Génération du log
 					}
 					catch (NullPointerException e2)
 		            {
+						new Log(e2.getMessage(), "Galerie : Adding (Directory Failed - Pointer)", "Galerie");  // Génération du log
 					}
 			
 					panel_galeries.repaint();
@@ -372,7 +371,7 @@ public class Galerie
 			}
 			catch (IOException e)
 			{
-				e.printStackTrace();
+				new Log(e.getMessage(), "Galerie : Start Picture (BATCH)", "Galerie");  // Génération du log
 			}	
 		}
 	}
@@ -480,10 +479,6 @@ public class Galerie
 							if(mode.equals("delete")) // Mode : delete
 							{
 								contatcs[i].delete();
-							}
-							else  // Mode : -
-							{
-								System.out.println("Erreur mode");
 							}
 						}	
 					}					

@@ -138,6 +138,7 @@ public class Index
 			} 
 			catch (IOException e) 
 			{
+				new Log(e.getMessage(), "Index : Set Url File (Directory Path)", "Index");  // Génération du log
 			}
 			
 	}
@@ -217,12 +218,14 @@ public class Index
 						} 
 						catch (IOException e) 
 						{
+							new Log(e.getMessage(), "Index : Change Path (Bad Path)", "Index");  // Génération du log
 							lblDirectory.setText("");
 							url = getUrl();
 						}					
 				}
 				catch(Exception e)
 				{
+					new Log(e.getMessage(), "Index : Change Path (Come Back)", "Index");  // Génération du log
 					lblDirectory.setText("");
 					url = getUrl();
 				}
@@ -236,6 +239,7 @@ public class Index
 				}
 				catch (Exception e) 
 				{
+					new Log(e.getMessage(), "Index : Change Path (Empty)", "Index");  // Génération du log
 					setUrl("C:\\Smartphone");
 				}
 			}
