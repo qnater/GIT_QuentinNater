@@ -25,7 +25,9 @@ public class Galerie
 	private String addingPath;
 	
 	// Labels utilisés comme des boutons
-	private JLabel lblDelete, lblComeBack, lblContGal;	
+	private JLabel lblDelete = new JLabel();
+	private JLabel lblComeBack = new JLabel();
+	private JLabel lblContGal = new JLabel();;	
 	private JLabel lblTools = new JLabel("Galerie");; 
 	private JLabel lblPic = new JLabel();
 	private JLabel lblAdding = new JLabel();
@@ -278,80 +280,83 @@ public class Galerie
 		@Override
 		public void mouseClicked(MouseEvent myMouse)
 		{
-			// Sélection de la mise en place d'une image de profil
-			if(myMouse.getSource() == lblContGal)
-			{				
-				// Appel de Contact avec un graphisme allégé et le chemin de l'image
-				@SuppressWarnings("unused")
-				Contact c = new Contact(v.getPic(), url, true);
-			}
-			// Clic sur lblComeBack
-			else if(myMouse.getSource() == lblComeBack)
-			{	
-				tools_alpha_add(); // Appel des outils primaires
-			}
-			// Clic sur lblComeBack
-			else if(myMouse.getSource() == lblDelete)
-			{
-				fileUnique(url, v.getName(), "delete"); // Supression de l'image
-				frame.dispose();
-				@SuppressWarnings("unused")
-				Galerie g = new Galerie(); // Rafraichissement de la galerie
-				panel_galeries.repaint();
-			}
-			// Clic sur lblAdding			
-			else if(myMouse.getSource() == lblAdding)
-			{
-					try // En cas d'annulation
-		            {
-						// Mise en place du FileChooser
-			            JFileChooser chooser = new JFileChooser();
-					    chooser.setCurrentDirectory(new java.io.File(url));
-			            chooser.setDialogTitle("Browse the folder to process");
-			            chooser.setAcceptAllFileFilterUsed(false);
-			            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				        // Seulement pour les images
-			            chooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png", "gif"));
-				           
-			            chooser.showOpenDialog(null);
-			            addingPath = chooser.getSelectedFile().toString();
-			            
-			            // Commande batch pour copier l'image dans le répertoire de l'application
-			            String install = "cmd /C xcopy \"" + addingPath +"\" /E /Q /I \"" + url + "\"";
-						Runtime.getRuntime().exec(install);	
-					
-						file(url, "show"); // Affichage de la galerie 
-							
-			        }					
-					catch (IOException e1)
-		            {
-						JOptionPane.showMessageDialog(frame,"Error - Failed Path\nDirectory Fail (Erreur C002)", "Failed Path", JOptionPane.ERROR_MESSAGE);
-						new Log(e1.getMessage(), "Galerie : Adding (Directory Failed)", "Galerie");  // Génération du log
-					}
-					catch (NullPointerException e2)
-		            {
-						new Log(e2.getMessage(), "Galerie : Adding (Directory Failed - Pointer)", "Galerie");  // Génération du log
-					}
-			
-					panel_galeries.repaint();
-					
+
+				// Sélection de la mise en place d'une image de profil
+				if(myMouse.getSource() == lblContGal)
+				{				
+					// Appel de Contact avec un graphisme allégé et le chemin de l'image
+					@SuppressWarnings("unused")
+					Contact c = new Contact(v.getPic(), url, true);
+				}
+				// Clic sur lblComeBack
+				else if(myMouse.getSource() == lblComeBack)
+				{	
+					tools_alpha_add(); // Appel des outils primaires
+				}
+				// Clic sur lblComeBack
+				else if(myMouse.getSource() == lblDelete)
+				{
+					fileUnique(url, v.getName(), "delete"); // Supression de l'image
 					frame.dispose();
-					
 					@SuppressWarnings("unused")
 					Galerie g = new Galerie(); // Rafraichissement de la galerie
-		           
-			}
-			// En cas de clic sur une image
-			else 
-			{
-				JLabel objectLbl = (JLabel) myMouse.getSource(); // Identifie l'image			
-				v.setName(objectLbl.getText());
-				v.setPic(objectLbl.getText());
+					panel_galeries.repaint();
+				}
+				// Clic sur lblAdding			
+				else if(myMouse.getSource() == lblAdding)
+				{
+						try // En cas d'annulation
+			            {
+							// Mise en place du FileChooser
+				            JFileChooser chooser = new JFileChooser();
+						    chooser.setCurrentDirectory(new java.io.File(url));
+				            chooser.setDialogTitle("Browse the folder to process");
+				            chooser.setAcceptAllFileFilterUsed(false);
+				            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+					        // Seulement pour les images
+				            chooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png", "gif"));
+					           
+				            chooser.showOpenDialog(null);
+				            addingPath = chooser.getSelectedFile().toString();
+				            
+				            // Commande batch pour copier l'image dans le répertoire de l'application
+				            String install = "cmd /C xcopy \"" + addingPath +"\" /E /Q /I \"" + url + "\"";
+							Runtime.getRuntime().exec(install);	
+						
+							file(url, "show"); // Affichage de la galerie 
+								
+				        }					
+						catch (IOException e1)
+			            {
+							JOptionPane.showMessageDialog(frame,"Error - Failed Path\nDirectory Fail (Erreur C002)", "Failed Path", JOptionPane.ERROR_MESSAGE);
+							new Log(e1.getMessage(), "Galerie : Adding (Directory Failed)", "Galerie");  // Génération du log
+						}
+						catch (NullPointerException e2)
+			            {
+							new Log(e2.getMessage(), "Galerie : Adding (Directory Failed - Pointer)", "Galerie");  // Génération du log
+						}
 				
-				panel_tools.removeAll();
-					tools_beta_add(objectLbl.getIcon()); // Outils de l'image en question
-				panel_tools.repaint();
-			}
+						panel_galeries.repaint();
+						
+						frame.dispose();
+						
+						@SuppressWarnings("unused")
+						Galerie g = new Galerie(); // Rafraichissement de la galerie
+			           
+				}
+				// En cas de clic sur une image
+				else 
+				{
+					JLabel objectLbl = new  JLabel();
+					objectLbl = (JLabel) myMouse.getSource(); // Identifie l'image			
+					v.setName	(objectLbl.getText());
+					v.setPic	(objectLbl.getText());									
+					
+					panel_tools.removeAll();
+						tools_beta_add(objectLbl.getIcon()); // Outils de l'image en question
+					panel_tools.repaint();
+				}
+			
 		}
 	}
 	
@@ -384,37 +389,31 @@ public class Galerie
 	private void tools_beta_add(Icon icon)
 	{
 		// Initialisation des variables
-		ImageIcon imageIcon;
-		Image image, newimg;
 		JLabel lblLooking = new JLabel();
-	
+		panel_tools.add(lblLooking);
 		// Affichage de l'image choisie
-		imageIcon = ((ImageIcon) icon);
-		image = imageIcon.getImage(); // transform it 
-		newimg = image.getScaledInstance(80, 80,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		ImageIcon imageIcon = ((ImageIcon) icon);
+		Image image = imageIcon.getImage(); // transform it 
+		Image newimg = image.getScaledInstance(80, 80,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 		lblLooking.setIcon((new ImageIcon(newimg)));
 
 		lblLooking.setForeground(Color.BLACK);
 		lblLooking.setFont(new Font("Monotype Corsiva", Font.BOLD, 0));
 		lblLooking.setHorizontalAlignment(SwingConstants.CENTER);
 
-		panel_tools.add(lblLooking);
-
+		
 		
 		// SHOW CONTACT
-		lblDelete = new JLabel("");
 		panel_tools.add(lblDelete);		
 		lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDelete.setIcon(new ImageIcon(Contact.class.getResource("/img/crossSubmit.PNG")));
+		lblDelete.setIcon(new ImageIcon(Contact.class.getResource("/img/CrossSubmit.PNG")));
 		
 		// CONTACT GALERIE CONTACT
-		lblContGal = new JLabel("");
 		panel_tools.add(lblContGal);		
 		lblContGal.setHorizontalAlignment(SwingConstants.CENTER);
-		lblContGal.setIcon(new ImageIcon(Contact.class.getResource("/img/contactgalerieSubmit.PNG")));
+		lblContGal.setIcon(new ImageIcon(Contact.class.getResource("/img/contactgs.PNG")));
 
 		// BACK CONTACT
-		lblComeBack = new JLabel("");
 		panel_tools.add(lblComeBack);		
 		lblComeBack.setHorizontalAlignment(SwingConstants.CENTER);
 		lblComeBack.setIcon(new ImageIcon(Contact.class.getResource("/img/backSubmit.PNG")));

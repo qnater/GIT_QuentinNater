@@ -1,3 +1,4 @@
+
 package src.Smartphone;
 
 import java.awt.*;
@@ -724,14 +725,14 @@ public class Contact
 		// ADD OPTIONS
 		lblModifier = new JLabel("");
 		lblModifier.setHorizontalAlignment(SwingConstants.CENTER);
-		lblModifier.setIcon(new ImageIcon(Contact.class.getResource("/img/modifySubmit.PNG")));
+		lblModifier.setIcon(new ImageIcon(Contact.class.getResource("/img/modifyS.PNG")));
 		panel_tools.add(lblModifier);
 
 		// SHOW CONTACT
 		lblDelete = new JLabel("");
 		panel_tools.add(lblDelete);		
 		lblDelete.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDelete.setIcon(new ImageIcon(Contact.class.getResource("/img/crossSubmit.PNG")));
+		lblDelete.setIcon(new ImageIcon(Contact.class.getResource("/img/CrossSubmit.PNG")));
 		
 		// FAVORIS CONTACT
 		lblComeBack = new JLabel("");
@@ -808,13 +809,7 @@ public class Contact
 			}
 			else
 			{	
-				// En cas de fermeture (revenir en arrière)
-				int reponse = JOptionPane.showConfirmDialog(null,"Voulez-vous réellement quitter sans sauver ?");
-			
-				if(reponse == JOptionPane.YES_OPTION)
-				{
-					dgFrame.dispose();
-				}
+				dgFrame.dispose();
 			}
 			
 		}	
