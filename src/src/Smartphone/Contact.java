@@ -190,7 +190,7 @@ public class Contact
 		// Mise en place de la scroll bar
 		contact.Scroll(panel_contacts, panel_center);
 		
-		// Appel des outils primaires
+		// Appel des outils primaires		
 		tools_alpha_add();
 	 
 		// Lecuture des fichiers de configuration des contacts
@@ -292,7 +292,11 @@ public class Contact
 				File myNewFile; // Initialisation d'un fichier
 				
 				// Application de la première lettre du Nom en majuscule
-				tName.setText(tName.getText().substring(0, 1).toUpperCase()+tName.getText().substring(1, tName.getText().length()));
+				if(fileName.equals("")) // Ecriture des variables à partir des textboxes
+					tName.setText(tName.getText().substring(0, 1).toUpperCase()+tName.getText().substring(1, tName.getText().length()));
+				else
+					tName.setText(v.getName().substring(0, 1).toUpperCase()+v.getName().substring(1, v.getName().length()));
+				
 				
 				// Ecriture du fichier en question, selon le nom donné
 				if(fileName.equals(""))	// Ajout normal		
@@ -364,8 +368,7 @@ public class Contact
 	 */	
 	private void setInfos(String mode) 
 	{
-		// Set the picture of the contact
-		setIconContact();		
+		
 		
 		// En cas d'ajout d'un contact
 		if(mode.equals("set"))
@@ -374,10 +377,13 @@ public class Contact
 			v.setPic("-");	v.setLastname("-");	v.setTelephone("-"); v.setPortable("-");
 			v.setEmail("-"); v.setProfession("-"); v.setOrganisation("-");	v.setWeb("-");
 			v.setDateNaissance("-"); v.setSong("-"); v.setNickname("-"); v.setFavoris("-");
-			modal = "set";
+			modal = "set"; 
 		}
 		else
 			modal = "use";
+		
+		// Set the picture of the contact
+				setIconContact();		
 				
 		// Vérification des touches utilisées
 		ContactKeyListener myKey = new ContactKeyListener();
@@ -661,29 +667,41 @@ public class Contact
 	 */	
 	private void tools_alpha_add()
 	{
-		// ADD OPTIONS
-		lblAdd = new JLabel("");
-		lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAdd.setIcon(new ImageIcon(Contact.class.getResource("/img/addSubmit.PNG")));
-		panel_tools.add(lblAdd);
-
-		// SHOW CONTACT
-		lblContact = new JLabel("");
-		panel_tools.add(lblContact);		
-		lblContact.setHorizontalAlignment(SwingConstants.CENTER);
-		lblContact.setIcon(new ImageIcon(Contact.class.getResource("/img/contactSubmit.PNG")));
-		
-		// FAVORIS CONTACT
-		lblFavoris = new JLabel("");
-		panel_tools.add(lblFavoris);		
-		lblFavoris.setHorizontalAlignment(SwingConstants.CENTER);
-		lblFavoris.setIcon(new ImageIcon(Contact.class.getResource("/img/favorisSubmit.PNG")));
-		
-		// Transformation des labels en boutons
-		MouseLisenerContact mlc = new MouseLisenerContact();
-		lblAdd.addMouseListener(mlc);
-		lblContact.addMouseListener(mlc);
-		lblFavoris.addMouseListener(mlc);
+		if(!t) 
+		{
+			// ADD OPTIONS
+			lblAdd = new JLabel("");
+			lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
+			lblAdd.setIcon(new ImageIcon(Contact.class.getResource("/img/addSubmit.PNG")));
+			panel_tools.add(lblAdd);
+	
+			// SHOW CONTACT
+			lblContact = new JLabel("");
+			panel_tools.add(lblContact);		
+			lblContact.setHorizontalAlignment(SwingConstants.CENTER);
+			lblContact.setIcon(new ImageIcon(Contact.class.getResource("/img/contactSubmit.PNG")));
+			
+			// FAVORIS CONTACT
+			lblFavoris = new JLabel("");
+			panel_tools.add(lblFavoris);		
+			lblFavoris.setHorizontalAlignment(SwingConstants.CENTER);
+			lblFavoris.setIcon(new ImageIcon(Contact.class.getResource("/img/favorisSubmit.PNG")));
+			
+			// Transformation des labels en boutons
+			MouseLisenerContact mlc = new MouseLisenerContact();
+			lblAdd.addMouseListener(mlc);
+			lblContact.addMouseListener(mlc);
+			lblFavoris.addMouseListener(mlc);
+		}
+		else
+		{
+			// CHOIX CONTACT
+			lblAdd = new JLabel("Choississez votre contact...");
+			lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
+			lblAdd.setFont(new Font("Tahoma", Font.BOLD, 20));
+			lblAdd.setForeground(Color.WHITE);			
+			panel_tools.add(lblAdd);
+		}
 		
 	}
 	
@@ -699,7 +717,7 @@ public class Contact
 		lblLooking.setIcon(icon);
 
 		lblLooking.setForeground(Color.BLACK);
-		lblLooking.setFont(new Font("Monotype Corsiva", Font.BOLD, 20));
+		lblLooking.setFont(new Font("Monotype Corsiva", Font.BOLD, 0));
 		lblLooking.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_tools.add(lblLooking);
 
@@ -846,7 +864,18 @@ public class Contact
 				// Modification du contact choisi avec l'image choisie
 				JLabel objectLbl = (JLabel) myMouse.getSource();
 				v.setName(objectLbl.getText());	
-				fileUnique(url, v.getName(), imageContact);
+				
+				try
+				{	
+					fileUnique(url, v.getName(), imageContact);
+				}
+				catch (Exception e)
+				{
+					System.out.println(url);
+					System.out.println(v.getName());
+					System.out.println(imageContact);
+				}
+				
 				
 				frame.dispose();
 			}

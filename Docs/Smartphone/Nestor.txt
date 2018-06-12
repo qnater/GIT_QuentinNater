@@ -1,1 +1,0 @@
-smart.conf;Nestor;C:\Smartphone\img\taverney.jpg;Taverney;r;-;-;-;-;-;-;-;-;0;
